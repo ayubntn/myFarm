@@ -1,34 +1,51 @@
 import Phaser from "phaser";
+import wastelandImage from "../assets/wasteland.png";
+import cultivatedLandImage from "../assets/cultivatedLand.png";
+import config from "../GameConfig";
+import Land, { LandType } from "../objects/land";
+
+const lands: Land[][] = [];
 
 class MyScene extends Phaser.Scene {
+
     constructor() {
         super({ key: 'myscene' });
     }
 
     preload() {
-        this.load.setBaseURL("https://labs.phaser.io");
-
-        this.load.image("sky", "assets/skies/space3.png");
-        this.load.image("logo", "assets/sprites/phaser3-logo.png");
-        this.load.image("red", "assets/particles/red.png");
+        this.load.image("wasteland", wastelandImage);
+        this.load.image("cultivatedLand", cultivatedLandImage);
+        lands.push([new Land(LandType.waste), new Land(LandType.waste), new Land(LandType.waste)]);
+        lands.push([new Land(LandType.waste), new Land(LandType.waste), new Land(LandType.waste)]);
+        lands.push([new Land(LandType.waste), new Land(LandType.waste), new Land(LandType.waste)]);
     }
 
     create() {
-        this.add.image(400, 300, 'sky');
-
-        const particles = this.add.particles(0, 0, 'red', {
-            speed: 100,
-            scale: { start: 1, end: 0 },
-            blendMode: 'ADD'
+        lands.forEach((row, i) => {
+            row.forEach((land, j) => {
+                const sprite = this.physics.add.sprite(config.blockWidth / 2 + config.blockWidth * i, config.blockHeight / 2 + config.blockHeight * j, land.type);
+                sprite.setScale(config.textureScale);
+                sprite.setInteractive();
+                sprite.on('pointerdown', () => {
+                    lands[i][j].onClick();
+                });
+                land.setSprite(sprite);
+            });
         });
+    }
 
-        const logo = this.physics.add.image(400, 100, 'logo');
+    update() {
+        for (let i = 0; i < lands.length; i++) {
+            if (!lands[i]) break;
 
-        logo.setVelocity(100, 200);
-        logo.setBounce(1, 1);
-        logo.setCollideWorldBounds(true);
+            for (let j = 0; j < lands[i].length; j++) {
+                if (!lands[i][j]) break;
 
-        particles.startFollow(logo);
+                const type = lands[i][j].type;
+                lands[i][j].sprite?.setTexture(type);
+            }
+        }
+
     }
 }
 

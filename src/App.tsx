@@ -2,29 +2,32 @@ import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import Phaser from "phaser";
 import MyScene from "./scenes/MyScene";
+import GameConfig from "./GameConfig";
 
 function App() {
   const canvas = useRef<HTMLCanvasElement>(null);
+  const [game, setGame] = useState<Phaser.Game | null>(null);
+  
 
   useEffect(() => {
-    if (!canvas) return;
+    if (!canvas || game) return;
 
     const config: Phaser.Types.Core.GameConfig = {
       canvas: canvas.current!,
       customEnvironment: true,
       type: Phaser.CANVAS,
-      width: 800,
-      height: 600,
+      width: GameConfig.canvasWidth,
+      height: GameConfig.canvasHeight,
       physics: {
         default: "arcade",
         arcade: {
-          gravity: { y: 200 },
+          debug: false
         },
       },
       scene: MyScene,
     };
-    new Phaser.Game(config);
-  }, [canvas]);
+    setGame(new Phaser.Game(config));
+  }, [canvas, game]);
 
   return (
     <>
