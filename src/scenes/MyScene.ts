@@ -15,12 +15,18 @@ class MyScene extends Phaser.Scene {
     preload() {
         this.load.image("wasteland", wastelandImage);
         this.load.image("cultivatedLand", cultivatedLandImage);
-        lands.push([new Land(LandType.waste), new Land(LandType.waste), new Land(LandType.waste)]);
-        lands.push([new Land(LandType.waste), new Land(LandType.waste), new Land(LandType.waste)]);
-        lands.push([new Land(LandType.waste), new Land(LandType.waste), new Land(LandType.waste)]);
+        
+        for (let i = 0; i < config.landSize.width; i++) {
+            for (let j = 0; j < config.landSize.height; j++) {
+                if (!lands[i]) lands[i] = [];
+                lands[i][j] = new Land(LandType.waste);
+            }
+        }
+        localStorage.setItem('lands', JSON.stringify(lands));
     }
 
     create() {
+        let count = 0;
         lands.forEach((row, i) => {
             row.forEach((land, j) => {
                 const sprite = this.physics.add.sprite(config.blockWidth / 2 + config.blockWidth * i, config.blockHeight / 2 + config.blockHeight * j, land.type);
@@ -29,20 +35,26 @@ class MyScene extends Phaser.Scene {
                 sprite.on('pointerdown', () => {
                     lands[i][j].onClick();
                 });
-                land.setSprite(sprite);
+                sprite.setDepth(count);
+                count++;
+                //land.setSprite(sprite);
             });
         });
     }
 
     update() {
+        this.children.depthSort();
+        const children = this.children.getChildren() as Phaser.Physics.Arcade.Sprite[];
+        
         for (let i = 0; i < lands.length; i++) {
             if (!lands[i]) break;
 
             for (let j = 0; j < lands[i].length; j++) {
                 if (!lands[i][j]) break;
-
                 const type = lands[i][j].type;
-                lands[i][j].sprite?.setTexture(type);
+                //console.log(lands.length * i + j);
+                children[lands.length * i + j].setTexture(type);
+                // lands[i][j].sprite?.setTexture(type);
             }
         }
 

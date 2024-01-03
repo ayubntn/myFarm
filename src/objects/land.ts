@@ -9,7 +9,7 @@ export enum LandType {
 class Land {
     type: LandType;
     crop?: Crop;
-    sprite?: Phaser.Physics.Arcade.Sprite;
+    //sprite?: Phaser.Physics.Arcade.Sprite;
 
     constructor(type: LandType) {
         this.type = type;
@@ -19,9 +19,9 @@ class Land {
         this.crop = crop;
     }
 
-    setSprite(sprite: Phaser.Physics.Arcade.Sprite) {
-        this.sprite = sprite;
-    }
+    // setSprite(sprite: Phaser.Physics.Arcade.Sprite) {
+    //     this.sprite = sprite;
+    // }
 
     onClick() {
         if (this.type === LandType.waste) {
