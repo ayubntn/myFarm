@@ -47,8 +47,8 @@ function App() {
         <canvas ref={canvas} />
       </div>
       <div className="operations">
-        <label><input type="radio" name="operation" value={OperationType.plow} onClick={() => setOperation(OperationType.plow)} checked={operation === OperationType.plow} />耕す</label>
-        <label><input type="radio" name="operation" value={OperationType.planting} onClick={() => setOperation(OperationType.planting)} checked={operation === OperationType.planting} />植付け</label>
+        <label><input type="radio" name="operation" value={OperationType.plow} onChange={() => setOperation(OperationType.plow)} checked={operation === OperationType.plow} />耕す</label>
+        <label><input type="radio" name="operation" value={OperationType.planting} onChange={() => setOperation(OperationType.planting)} checked={operation === OperationType.planting} />植付け</label>
         <div className="buttons">
           <button type="button" onClick={reset}>リセット</button>
         </div>

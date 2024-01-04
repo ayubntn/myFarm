@@ -31,7 +31,7 @@ class Land {
                 this.type = LandType.cultivated;
             }
             console.log('plow ' + this.type);
-        } else if (myGlobal.operation === OperationType.planting) {
+        } else if (myGlobal.operation === OperationType.planting && this.type === LandType.cultivated) {
             this.crop = new Crop();
         }
     }
@@ -46,6 +46,9 @@ class Land {
                 if (!lands[i]) lands[i] = [];
                 for (let j = 0; j < row.length; j++) {
                     lands[i][j] = new Land(row[j].type);
+                    if (row[j].crop) {
+                        lands[i][j].setCrop(new Crop(row[j].crop.status));
+                    }
                 }
             }
         } else {

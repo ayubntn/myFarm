@@ -7,9 +7,11 @@ export enum CropStatus {
 
 class Crop {
     status: CropStatus;
+    createdAt: Date = new Date();
 
-    constructor() {
-        this.status = CropStatus.sowing;
+    constructor(status: CropStatus = CropStatus.sowing, createdAt: Date = new Date()) {
+        this.status = status;
+        this.createdAt = createdAt;
     }
 }
 
