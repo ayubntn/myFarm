@@ -20,9 +20,7 @@ function App() {
     if (!canvas || game) return;
 
     const config: Phaser.Types.Core.GameConfig = {
-      canvas: canvas.current!,
-      customEnvironment: true,
-      type: Phaser.CANVAS,
+      parent: "game",
       width: GameConfig.canvasWidth,
       height: GameConfig.canvasHeight,
       physics: {
@@ -34,6 +32,7 @@ function App() {
       scene: MyScene,
     };
     setGame(new Phaser.Game(config));
+
   }, [canvas, game]);
 
   useEffect(() => {
@@ -43,9 +42,7 @@ function App() {
 
   return (
     <div className="container">
-      <div>
-        <canvas ref={canvas} />
-      </div>
+      <div id="game"></div>
       <div className="operations">
         <label><input type="radio" name="operation" value={OperationType.plow} onChange={() => setOperation(OperationType.plow)} checked={operation === OperationType.plow} />耕す</label>
         <label><input type="radio" name="operation" value={OperationType.planting} onChange={() => setOperation(OperationType.planting)} checked={operation === OperationType.planting} />植付け</label>

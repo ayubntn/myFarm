@@ -1,8 +1,8 @@
 export enum CropStatus {
-    sowing,
-    germination,
-    growing,
-    harvestable,
+    sowing = 'sowing',
+    germination = 'germination',
+    growing = 'growing',
+    harvestable = 'harvestable',
 }
 
 class Crop {
