@@ -30,7 +30,9 @@ class Land {
             if (this.type === LandType.waste) {
                 this.type = LandType.cultivated;
             }
-            console.log('click' + this.type);
+            console.log('plow ' + this.type);
+        } else if (myGlobal.operation === OperationType.planting) {
+            this.crop = new Crop();
         }
     }
 
