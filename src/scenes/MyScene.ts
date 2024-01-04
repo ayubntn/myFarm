@@ -3,6 +3,7 @@ import wastelandImage from "../assets/wasteland.png";
 import cultivatedLandImage from "../assets/cultivatedLand.png";
 import config from "../GameConfig";
 import Land from "../objects/land";
+import myGlobal from "../myGlobal";
 
 let lands: Land[][] = [];
 
@@ -34,6 +35,10 @@ class MyScene extends Phaser.Scene {
     }
 
     update() {
+        if (myGlobal.reset) {
+            lands = Land.resetListAndStorage();
+            myGlobal.reset = false;
+        }
         this.children.depthSort();
         const children = this.children.getChildren() as Phaser.Physics.Arcade.Sprite[];
         

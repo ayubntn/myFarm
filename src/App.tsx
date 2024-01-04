@@ -3,6 +3,7 @@ import './App.css'
 import Phaser from "phaser";
 import MyScene from "./scenes/MyScene";
 import GameConfig from "./GameConfig";
+import myGlobal from "./myGlobal";
 
 function App() {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -29,9 +30,12 @@ function App() {
     setGame(new Phaser.Game(config));
   }, [canvas, game]);
 
+  const reset = () => {
+    myGlobal.reset = true;
+  }
   return (
     <>
-      <button type="button">リセット</button>
+      <button type="button" onClick={reset}>リセット</button>
       <canvas ref={canvas} />
     </>
   )

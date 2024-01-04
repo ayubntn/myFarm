@@ -32,7 +32,7 @@ class Land {
     }
 
     static createListFromStrage() {
-        const lands: Land[][] = [];
+        let lands: Land[][] = [];
         const landsStr = localStorage.getItem("lands");
         if (landsStr) {
             const array = JSON.parse(landsStr);
@@ -44,14 +44,25 @@ class Land {
                 }
             }
         } else {
-            for (let i = 0; i < config.landSize.width; i++) {
-                for (let j = 0; j < config.landSize.height; j++) {
-                    if (!lands[i]) lands[i] = [];
-                    lands[i][j] = new Land(LandType.waste);
-                }
+            lands = Land.createDefaultList();
+        }
+        return lands;
+    }
+
+    static createDefaultList() {
+        const lands: Land[][] = [];
+        for (let i = 0; i < config.landSize.width; i++) {
+            for (let j = 0; j < config.landSize.height; j++) {
+                if (!lands[i]) lands[i] = [];
+                lands[i][j] = new Land(LandType.waste);
             }
         }
         return lands;
+    }
+
+    static resetListAndStorage() {
+        localStorage.removeItem("lands");
+        return Land.createDefaultList();
     }
 }
 
