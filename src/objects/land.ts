@@ -1,5 +1,6 @@
 import Crop from "./crop";
 import config from "../GameConfig";
+import myGlobal, { OperationType } from "../myGlobal";
 
 export enum LandType {
     waste = 'wasteland',
@@ -25,10 +26,12 @@ class Land {
     // }
 
     onClick() {
-        if (this.type === LandType.waste) {
-            this.type = LandType.cultivated;
+        if (myGlobal.operation === OperationType.plow) {
+            if (this.type === LandType.waste) {
+                this.type = LandType.cultivated;
+            }
+            console.log('click' + this.type);
         }
-        console.log ('click' + this.type);
     }
 
     static createListFromStrage() {

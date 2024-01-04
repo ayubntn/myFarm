@@ -29,12 +29,12 @@ class MyScene extends Phaser.Scene {
                     lands[i][j].onClick();
                 });
                 sprite.setDepth(lands.length * i + j);
-                //land.setSprite(sprite);
             });
         });
     }
 
     update() {
+        //myGlobal.setOperation(OperationType.planting);
         if (myGlobal.reset) {
             lands = Land.resetListAndStorage();
             myGlobal.reset = false;
@@ -48,9 +48,7 @@ class MyScene extends Phaser.Scene {
             for (let j = 0; j < lands[i].length; j++) {
                 if (!lands[i][j]) break;
                 const type = lands[i][j].type;
-                //console.log(lands.length * i + j);
                 children[lands.length * i + j].setTexture(type);
-                // lands[i][j].sprite?.setTexture(type);
             }
         }
         localStorage.setItem("lands", JSON.stringify(lands));
