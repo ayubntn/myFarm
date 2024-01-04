@@ -31,6 +31,7 @@ function App() {
 
   return (
     <>
+      <button type="button">リセット</button>
       <canvas ref={canvas} />
     </>
   )

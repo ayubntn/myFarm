@@ -2,9 +2,9 @@ import Phaser from "phaser";
 import wastelandImage from "../assets/wasteland.png";
 import cultivatedLandImage from "../assets/cultivatedLand.png";
 import config from "../GameConfig";
-import Land, { LandType } from "../objects/land";
+import Land from "../objects/land";
 
-const lands: Land[][] = [];
+let lands: Land[][] = [];
 
 class MyScene extends Phaser.Scene {
 
@@ -15,18 +15,10 @@ class MyScene extends Phaser.Scene {
     preload() {
         this.load.image("wasteland", wastelandImage);
         this.load.image("cultivatedLand", cultivatedLandImage);
-        
-        for (let i = 0; i < config.landSize.width; i++) {
-            for (let j = 0; j < config.landSize.height; j++) {
-                if (!lands[i]) lands[i] = [];
-                lands[i][j] = new Land(LandType.waste);
-            }
-        }
-        localStorage.setItem('lands', JSON.stringify(lands));
     }
 
     create() {
-        let count = 0;
+        lands = Land.createListFromStrage();
         lands.forEach((row, i) => {
             row.forEach((land, j) => {
                 const sprite = this.physics.add.sprite(config.blockWidth / 2 + config.blockWidth * i, config.blockHeight / 2 + config.blockHeight * j, land.type);
@@ -35,8 +27,7 @@ class MyScene extends Phaser.Scene {
                 sprite.on('pointerdown', () => {
                     lands[i][j].onClick();
                 });
-                sprite.setDepth(count);
-                count++;
+                sprite.setDepth(lands.length * i + j);
                 //land.setSprite(sprite);
             });
         });
@@ -57,7 +48,7 @@ class MyScene extends Phaser.Scene {
                 // lands[i][j].sprite?.setTexture(type);
             }
         }
-
+        localStorage.setItem("lands", JSON.stringify(lands));
     }
 }
 
