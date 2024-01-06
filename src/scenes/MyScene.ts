@@ -24,7 +24,7 @@ class MyScene extends Phaser.Scene {
 
     create() {
         // なぜか発生するシーンの重複を削除
-        if (!isDestroy) {
+        if (import.meta.env.MODE === 'development' && !isDestroy) {
             this.scene.remove('myscene0');
             isDestroy = true;
             return;
