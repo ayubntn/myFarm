@@ -2,19 +2,39 @@
   text-align: center;
 }
 
+#game {
+  text-align: center;
+}
+
 #game > canvas:first-child {
   display: none;
 }
 
 .container {
+  width: 600px;
   display: inline-block;
   text-align: left;
 }
 
 .operations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  border: 1px solid #ccc;
+  padding: 40px;
+}
 
+.operationBtn {
+  display: inline-block;
+  background-color: #4a4a4a;
+  padding: 10px 20px;
 }
 
 .buttons {
-  
+  width: 100%;
+}
+
+.cropTypes {
+  display: flex;
+  flex-wrap: wrap;
 }

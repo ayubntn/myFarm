@@ -1,3 +1,5 @@
+import { CropType } from './objects/crop';
+
 export enum OperationType {
     plow = 1,
     planting = 2,
@@ -6,6 +8,7 @@ export enum OperationType {
 const myGlobal = {
     operation: OperationType.plow,
     setOperation: (operation: OperationType) => { console.log(operation) },
+    cropType: CropType.wheat,
     reset: false,
 };
 

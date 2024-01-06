@@ -1,12 +1,9 @@
 import Phaser from "phaser";
-import wastelandImage from "../assets/wasteland.png";
-import cultivatedLandImage from "../assets/cultivatedLand.png";
-import wheatSowingImage from "../assets/wheat/sowing.png";
-import wheatGerminationImage from "../assets/wheat/germination.png";
 import config from "../GameConfig";
 import Land from "../objects/land";
 import myGlobal from "../myGlobal";
 import { CropStatus } from "../objects/crop";
+import loadImages from "../ImageLoader";
 
 let lands: Land[][] = [];
 let landSprites: Phaser.Physics.Arcade.Sprite[][] = [];
@@ -22,10 +19,7 @@ class MyScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("wasteland", wastelandImage);
-        this.load.image("cultivatedLand", cultivatedLandImage);
-        this.load.image("wheat_sowing", wheatSowingImage);
-        this.load.image("wheat_germination", wheatGerminationImage);
+        loadImages(this);
     }
 
     create() {
@@ -65,6 +59,7 @@ class MyScene extends Phaser.Scene {
                     sprite.destroy();
                 });
             });
+            landSprites = [];
             cropSprites = [];
             myGlobal.reset = false;
         }
@@ -84,13 +79,13 @@ class MyScene extends Phaser.Scene {
                     if (!cropSprites[i]) cropSprites[i] = [];
                     if (!cropSprites[i][j]) {
                         const landSprite = landSprites[i][j];
-                        const cropSprite = this.physics.add.sprite(landSprite.x, landSprite.y, "wheat_" + crop.status);
+                        const cropSprite = this.physics.add.sprite(landSprite.x, landSprite.y, crop.type + "_" + crop.status);
                         cropSprite.setScale(config.textureScale);
                         cropSprite.setInteractive();
                         cropSprite.setDepth(100 + lands.length * i + j);
                         cropSprites[i][j] = cropSprite;
                     } else {
-                        cropSprites[i][j].setTexture("wheat_" + crop.status);
+                        cropSprites[i][j].setTexture(crop.type + "_" + crop.status);
                     }
 
                 }
@@ -107,6 +102,8 @@ class MyScene extends Phaser.Scene {
                 const nowTime = (Date.now() - land.crop.createdAt.getTime()) / 1000;
                 if (land.crop.status === CropStatus.sowing && nowTime > 3) {
                     land.crop.status = CropStatus.germination;
+                } else if (land.crop.status === CropStatus.germination && nowTime > 6) {
+                    land.crop.status = CropStatus.growing;
                 }
             }
         }

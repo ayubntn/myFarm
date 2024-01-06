@@ -11,7 +11,6 @@ export enum LandType {
 class Land {
     type: LandType;
     crop?: Crop;
-    //sprite?: Phaser.Physics.Arcade.Sprite;
 
     constructor(type: LandType) {
         this.type = type;
@@ -21,10 +20,6 @@ class Land {
         this.crop = crop;
     }
 
-    // setSprite(sprite: Phaser.Physics.Arcade.Sprite) {
-    //     this.sprite = sprite;
-    // }
-
     onClick() {
         if (myGlobal.operation === OperationType.plow) {
             if (this.type === LandType.waste) {
@@ -32,7 +27,8 @@ class Land {
             }
             console.log('plow ' + this.type);
         } else if (myGlobal.operation === OperationType.planting && this.type === LandType.cultivated) {
-            this.crop = new Crop();
+            console.log(myGlobal.cropType)
+            this.crop = new Crop(myGlobal.cropType);
         }
     }
 
@@ -46,8 +42,9 @@ class Land {
                 if (!lands[i]) lands[i] = [];
                 for (let j = 0; j < row.length; j++) {
                     lands[i][j] = new Land(row[j].type);
-                    if (row[j].crop) {
-                        lands[i][j].setCrop(new Crop(row[j].crop.status, new Date(row[j].crop.createdAt)));
+                    const crop = row[j].crop;
+                    if (crop) {
+                        lands[i][j].setCrop(new Crop(crop.type, crop.status, new Date(crop.createdAt)));
                     }
                 }
             }
