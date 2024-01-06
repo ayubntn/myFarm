@@ -47,7 +47,7 @@ class Land {
                 for (let j = 0; j < row.length; j++) {
                     lands[i][j] = new Land(row[j].type);
                     if (row[j].crop) {
-                        lands[i][j].setCrop(new Crop(row[j].crop.status));
+                        lands[i][j].setCrop(new Crop(row[j].crop.status, new Date(row[j].crop.createdAt)));
                     }
                 }
             }

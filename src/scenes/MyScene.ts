@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import wastelandImage from "../assets/wasteland.png";
 import cultivatedLandImage from "../assets/cultivatedLand.png";
 import wheatSowingImage from "../assets/wheat/sowing.png";
+import wheatGerminationImage from "../assets/wheat/germination.png";
 import config from "../GameConfig";
 import Land from "../objects/land";
 import myGlobal from "../myGlobal";
@@ -23,6 +24,7 @@ class MyScene extends Phaser.Scene {
         this.load.image("wasteland", wastelandImage);
         this.load.image("cultivatedLand", cultivatedLandImage);
         this.load.image("wheat_sowing", wheatSowingImage);
+        this.load.image("wheat_germination", wheatGerminationImage);
     }
 
     create() {
@@ -63,9 +65,12 @@ class MyScene extends Phaser.Scene {
             cropSprites = [];
             myGlobal.reset = false;
         }
+
+        // 土地のspriteを無理やり取得（landSpritesとして保持すればよかった）
         this.children.depthSort();
         const children = this.children.getChildren() as Phaser.Physics.Arcade.Sprite[];
 
+        // 土地と作目の状態更新
         for (let i = 0; i < lands.length; i++) {
             if (!lands[i]) break;
 
@@ -77,21 +82,39 @@ class MyScene extends Phaser.Scene {
 
                 if (land.crop) {
                     const crop = land.crop;
-                    if (crop.status === CropStatus.sowing) {
-                        //children[lands.length * i + j].setTexture("wheat_sowing");
-                        if (!cropSprites[i]) cropSprites[i] = [];
-                        if (!cropSprites[i][j]) {
-                            const landSprite = children[lands.length * i + j];
-                            const cropSprite = this.physics.add.sprite(landSprite.x, landSprite.y, "wheat_sowing");
-                            cropSprite.setScale(config.textureScale);
-                            cropSprite.setInteractive();
-                            cropSprite.setDepth(100 + lands.length * i + j);
-                            cropSprites[i][j] = cropSprite;
-                        }
+                    if (!cropSprites[i]) cropSprites[i] = [];
+                    if (!cropSprites[i][j]) {
+                        const landSprite = children[lands.length * i + j];
+                        const cropSprite = this.physics.add.sprite(landSprite.x, landSprite.y, "wheat_" + crop.status);
+                        cropSprite.setScale(config.textureScale);
+                        cropSprite.setInteractive();
+                        cropSprite.setDepth(100 + lands.length * i + j);
+                        cropSprites[i][j] = cropSprite;
+                    } else {
+                        cropSprites[i][j].setTexture("wheat_" + crop.status);
                     }
+
                 }
             }
         }
+
+        // タイマーと成長
+        for (let i = 0; i < lands.length; i++) {
+            if (!lands[i]) break;
+
+            for (let j = 0; j < lands[i].length; j++) {
+                const land = lands[i][j];
+                if (!land || !land.crop) break;
+
+                const nowTime = (Date.now() - land.crop.createdAt.getTime()) / 1000;
+    console.log(nowTime);
+                if (land.crop.status === CropStatus.sowing && nowTime > 3) {
+                    land.crop.status = CropStatus.germination;
+                    console.log('germination', i, j)
+                }
+            }
+        }
+
         localStorage.setItem("lands", JSON.stringify(lands));
     }
 }
