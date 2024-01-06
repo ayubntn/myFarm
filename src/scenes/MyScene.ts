@@ -79,7 +79,7 @@ class MyScene extends Phaser.Scene {
                     if (!cropSprites[i]) cropSprites[i] = [];
                     if (!cropSprites[i][j]) {
                         const landSprite = landSprites[i][j];
-                        const cropSprite = this.physics.add.sprite(landSprite.x, landSprite.y, crop.type + "_" + crop.status);
+                        const cropSprite = this.physics.add.sprite(landSprite.x, landSprite.y - 10, crop.type + "_" + crop.status);
                         cropSprite.setScale(config.textureScale);
                         cropSprite.setInteractive();
                         cropSprite.setDepth(100 + lands.length * i + j);
