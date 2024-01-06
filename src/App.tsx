@@ -5,7 +5,7 @@ import MyScene from "./scenes/MyScene";
 import GameConfig from "./GameConfig";
 import myGlobal, { OperationType } from "./myGlobal";
 import { CropType } from "./objects/crop";
-import wastelandImage from "./assets/wasteland.png";
+
 function App() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const [game, setGame] = useState<Phaser.Game | null>(null);
@@ -44,7 +44,6 @@ function App() {
 
   return (
     <div className="container">
-      <img src={wastelandImage} alt="wasteland" />
       <div id="game"></div>
       <div className="operations">
         <label className="operationBtn">

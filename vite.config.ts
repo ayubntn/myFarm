@@ -5,4 +5,5 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   base: "/myFarm/",                  
   plugins: [react()],
+  build: {assetsInlineLimit: 0},
 })
