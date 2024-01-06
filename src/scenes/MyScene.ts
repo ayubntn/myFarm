@@ -9,6 +9,7 @@ import myGlobal from "../myGlobal";
 import { CropStatus } from "../objects/crop";
 
 let lands: Land[][] = [];
+let landSprites: Phaser.Physics.Arcade.Sprite[][] = [];
 let cropSprites: Phaser.Physics.Arcade.Sprite[][] = [];
 let isDestroy = false;
 let sceneCount = 0;
@@ -39,8 +40,8 @@ class MyScene extends Phaser.Scene {
         lands.forEach((row, i) => {
             row.forEach((land, j) => {
                 const sprite = this.physics.add.sprite(
-                    config.blockWidth / 2 + config.blockWidth * i + config.gap * i,
-                    config.blockHeight / 2 + config.blockHeight * j + config.gap * j,
+                    config.blockWidth / 2 + config.blockWidth * j + config.gap * j,
+                    config.blockHeight / 2 + config.blockHeight * i + config.gap * i,
                     land.type
                 );
                 sprite.setScale(config.textureScale);
@@ -49,6 +50,8 @@ class MyScene extends Phaser.Scene {
                     lands[i][j].onClick();
                 });
                 sprite.setDepth(lands.length * i + j);
+                if (!landSprites[i]) landSprites[i] = [];
+                landSprites[i][j] = sprite;
             });
         });
     }
@@ -66,25 +69,21 @@ class MyScene extends Phaser.Scene {
             myGlobal.reset = false;
         }
 
-        // 土地のspriteを無理やり取得（landSpritesとして保持すればよかった）
-        this.children.depthSort();
-        const children = this.children.getChildren() as Phaser.Physics.Arcade.Sprite[];
-
-        // 土地と作目の状態更新
+        // 土地と作物の状態更新
         for (let i = 0; i < lands.length; i++) {
-            if (!lands[i]) break;
+            if (!lands[i]) continue;
 
             for (let j = 0; j < lands[i].length; j++) {
                 const land = lands[i][j];
-                if (!land) break;
+                if (!land) continue;
                 const type = land.type;
-                children[lands.length * i + j].setTexture(type);
+                landSprites[i][j].setTexture(type);
 
                 if (land.crop) {
                     const crop = land.crop;
                     if (!cropSprites[i]) cropSprites[i] = [];
                     if (!cropSprites[i][j]) {
-                        const landSprite = children[lands.length * i + j];
+                        const landSprite = landSprites[i][j];
                         const cropSprite = this.physics.add.sprite(landSprite.x, landSprite.y, "wheat_" + crop.status);
                         cropSprite.setScale(config.textureScale);
                         cropSprite.setInteractive();
@@ -100,17 +99,14 @@ class MyScene extends Phaser.Scene {
 
         // タイマーと成長
         for (let i = 0; i < lands.length; i++) {
-            if (!lands[i]) break;
-
+            if (!lands[i]) continue;
+            
             for (let j = 0; j < lands[i].length; j++) {
                 const land = lands[i][j];
-                if (!land || !land.crop) break;
-
+                if (!land || !land.crop) continue;
                 const nowTime = (Date.now() - land.crop.createdAt.getTime()) / 1000;
-    console.log(nowTime);
                 if (land.crop.status === CropStatus.sowing && nowTime > 3) {
                     land.crop.status = CropStatus.germination;
-                    console.log('germination', i, j)
                 }
             }
         }

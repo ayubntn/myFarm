@@ -5,7 +5,7 @@ export enum OperationType {
 
 const myGlobal = {
     operation: OperationType.plow,
-    setOperation: (operation: OperationType) => {},
+    setOperation: (operation: OperationType) => { console.log(operation) },
     reset: false,
 };
 
