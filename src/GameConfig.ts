@@ -5,9 +5,12 @@ const config = {
     blockWidth: 80,
     blockHeight: 82,
     landSize: { width: 5, height: 5 },
+    landAreaX: 81 * 2,
+    landAreaY: 83,
     gap: 1,
 };
 
-config.canvasWidth = config.blockWidth * config.landSize.width + config.gap * (config.landSize.width - 1);
-config.canvasHeight = config.blockHeight * config.landSize.height + config.gap * (config.landSize.height - 1);
+config.canvasWidth = config.blockWidth * 9 + config.gap * (9 - 1);
+config.canvasHeight = config.blockHeight * 7 + config.gap * (7 - 1);
+
 export default config;

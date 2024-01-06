@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import config from "../GameConfig";
 import Land from "../objects/land";
 import myGlobal from "../myGlobal";
-import { CropStatus } from "../objects/crop";
+import { CropStatus, CropGrowthTime } from "../objects/crop";
 import loadImages from "../ImageLoader";
 
 let lands: Land[][] = [];
@@ -30,30 +30,22 @@ class MyScene extends Phaser.Scene {
             return;
         }
 
+        const background = this.add.tileSprite(config.canvasWidth / 2, config.canvasHeight / 2, config.canvasWidth * 2, config.canvasHeight * 2, 'background');
+        background.setScale(config.textureScale);
+
         lands = Land.createListFromStrage();
-        lands.forEach((row, i) => {
-            row.forEach((land, j) => {
-                const sprite = this.physics.add.sprite(
-                    config.blockWidth / 2 + config.blockWidth * j + config.gap * j,
-                    config.blockHeight / 2 + config.blockHeight * i + config.gap * i,
-                    land.type
-                );
-                sprite.setScale(config.textureScale);
-                sprite.setInteractive();
-                sprite.on('pointerdown', () => {
-                    lands[i][j].onClick();
-                });
-                sprite.setDepth(lands.length * i + j);
-                if (!landSprites[i]) landSprites[i] = [];
-                landSprites[i][j] = sprite;
-            });
-        });
+        this.initLands();
     }
 
     update() {
         //myGlobal.setOperation(OperationType.planting);
         if (myGlobal.reset) {
             lands = Land.resetListAndStorage();
+            landSprites.forEach(row => {
+                row.forEach(sprite => {
+                    sprite.destroy();
+                });
+            });
             cropSprites.forEach(row => {
                 row.forEach(sprite => {
                     sprite.destroy();
@@ -61,6 +53,7 @@ class MyScene extends Phaser.Scene {
             });
             landSprites = [];
             cropSprites = [];
+            this.initLands();
             myGlobal.reset = false;
         }
 
@@ -82,6 +75,9 @@ class MyScene extends Phaser.Scene {
                         const cropSprite = this.physics.add.sprite(landSprite.x, landSprite.y - 10, crop.type + "_" + crop.status);
                         cropSprite.setScale(config.textureScale);
                         cropSprite.setInteractive();
+                        cropSprite.on('pointerdown', () => {
+                            crop.onClick();
+                        });
                         cropSprite.setDepth(100 + lands.length * i + j);
                         cropSprites[i][j] = cropSprite;
                     } else {
@@ -100,15 +96,38 @@ class MyScene extends Phaser.Scene {
                 const land = lands[i][j];
                 if (!land || !land.crop) continue;
                 const nowTime = (Date.now() - land.crop.createdAt.getTime()) / 1000;
-                if (land.crop.status === CropStatus.sowing && nowTime > 3) {
+                const time = CropGrowthTime[land.crop.type];
+                if (land.crop.status === CropStatus.sowing && nowTime > time) {
                     land.crop.status = CropStatus.germination;
-                } else if (land.crop.status === CropStatus.germination && nowTime > 6) {
+                } else if (land.crop.status === CropStatus.germination && nowTime > time * 2) {
                     land.crop.status = CropStatus.growing;
+                } else if (land.crop.status === CropStatus.growing && nowTime > time * 3) {
+                    land.crop.status = CropStatus.harvestable;
                 }
             }
         }
 
         localStorage.setItem("lands", JSON.stringify(lands));
+    }
+
+    initLands() {
+        lands.forEach((row, i) => {
+            row.forEach((land, j) => {
+                const sprite = this.physics.add.sprite(
+                    config.landAreaX + config.blockWidth / 2 + config.blockWidth * j + config.gap * j,
+                    config.landAreaY + config.blockHeight / 2 + config.blockHeight * i + config.gap * i,
+                    land.type
+                );
+                sprite.setScale(config.textureScale);
+                sprite.setInteractive();
+                sprite.on('pointerdown', () => {
+                    lands[i][j].onClick();
+                });
+                sprite.setDepth(lands.length * i + j);
+                if (!landSprites[i]) landSprites[i] = [];
+                landSprites[i][j] = sprite;
+            });
+        });
     }
 }
 

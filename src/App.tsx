@@ -32,6 +32,8 @@ function App() {
         },
       },
       scene: MyScene,
+      backgroundColor: "#ffffff",
+      antialias: true,
     };
     setGame(new Phaser.Game(config));
 
