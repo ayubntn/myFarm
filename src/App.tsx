@@ -44,7 +44,7 @@ function App() {
 
   return (
     <div className="container">
-      <div id="game"></div>
+      <div id="game" className={import.meta.env.MODE === 'development' ? 'is-development' : ''}></div>
       <div className="operations">
         <label className="operationBtn">
           <input

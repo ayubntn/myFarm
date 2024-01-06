@@ -6,7 +6,7 @@
   text-align: center;
 }
 
-#game > canvas:first-child {
+#game.is-development > canvas:first-child {
   display: none;
 }
 
