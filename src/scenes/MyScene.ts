@@ -35,6 +35,10 @@ class MyScene extends Phaser.Scene {
 
         lands = Land.createListFromStrage();
         this.initLands();
+
+        this.add.image(104, 40, 'strageBar').setScale(config.textureScale);
+        const strageIcon = this.physics.add.sprite(40, 40, 'strageIcon');
+        strageIcon.setScale(config.textureScale);
     }
 
     update() {
