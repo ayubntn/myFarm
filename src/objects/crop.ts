@@ -1,8 +1,12 @@
+import Item from './item';
+import Strage from './strage';
+
 export enum CropStatus {
     sowing = 'sowing',
     germination = 'germination',
     growing = 'growing',
     harvestable = 'harvestable',
+    harvested = 'harvested',
 }
 
 export enum CropType {
@@ -10,17 +14,23 @@ export enum CropType {
     rice = 'rice',
 }
 
+export const CropName = {
+    [CropType.wheat]: 'こむぎ',
+    [CropType.rice]: 'おこめ',
+}
+
 export const CropGrowthTime = {
     [CropType.wheat]: 3,
     [CropType.rice]: 6,
 }
 
-class Crop {
+class Crop extends Item {
     type: CropType;
     status: CropStatus;
     createdAt: Date = new Date();
 
     constructor(type: CropType, status: CropStatus = CropStatus.sowing, createdAt: Date = new Date()) {
+        super(CropName[type]);
         this.type = type;
         this.status = status;
         this.createdAt = createdAt;
@@ -28,6 +38,10 @@ class Crop {
 
     onClick() {
         console.log(this.type + ' ' + this.status);
+        if (this.status === CropStatus.harvestable) {
+            this.status = CropStatus.harvested;
+            Strage.add(this);
+        }
     }
 }
 

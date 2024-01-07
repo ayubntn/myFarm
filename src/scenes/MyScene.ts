@@ -7,7 +7,7 @@ import loadImages from "../ImageLoader";
 
 let lands: Land[][] = [];
 let landSprites: Phaser.Physics.Arcade.Sprite[][] = [];
-let cropSprites: Phaser.Physics.Arcade.Sprite[][] = [];
+let cropSprites: (Phaser.Physics.Arcade.Sprite | null)[][] = [];
 let isDestroy = false;
 let sceneCount = 0;
 
@@ -52,7 +52,7 @@ class MyScene extends Phaser.Scene {
             });
             cropSprites.forEach(row => {
                 row.forEach(sprite => {
-                    sprite.destroy();
+                    sprite?.destroy();
                 });
             });
             landSprites = [];
@@ -70,9 +70,16 @@ class MyScene extends Phaser.Scene {
                 if (!land) continue;
                 const type = land.type;
                 landSprites[i][j].setTexture(type);
+                const crop = land.crop;
 
-                if (land.crop) {
-                    const crop = land.crop;
+                if (crop) {
+                    if (crop.status === CropStatus.harvested) {
+                        land.crop = undefined;
+                        cropSprites[i][j]?.destroy();
+                        cropSprites[i][j] = null;
+                        continue;
+                    }
+                    
                     if (!cropSprites[i]) cropSprites[i] = [];
                     if (!cropSprites[i][j]) {
                         const landSprite = landSprites[i][j];
@@ -85,7 +92,7 @@ class MyScene extends Phaser.Scene {
                         cropSprite.setDepth(100 + lands.length * i + j);
                         cropSprites[i][j] = cropSprite;
                     } else {
-                        cropSprites[i][j].setTexture(crop.type + "_" + crop.status);
+                        cropSprites[i][j]?.setTexture(crop.type + "_" + crop.status);
                     }
 
                 }
