@@ -90,12 +90,11 @@ class MyScene extends Phaser.Scene {
                         cropSprite.setInteractive();
                         cropSprite.on('pointerdown', () => {
                             console.log('click crop');
-                            targetLand = null;
+                            this.resetState();
                             if (crop.status === CropStatus.harvestable) {
                                 harvestTargetCrop = crop;
                             } else {
                                 targetCrop = crop;
-                                targetRect?.destroy();
                                 targetRect = new TargetRect(this, landSprites[i][j]);
                             }
                         });
@@ -181,9 +180,9 @@ class MyScene extends Phaser.Scene {
                 sprite.setInteractive();
                 sprite.on('pointerdown', () => {
                     console.log('click land');
+                    this.resetState();
                     targetLand = land;
                     const targetSprite = landSprites[i][j];
-                    targetRect?.destroy();
                     targetRect = new TargetRect(this, targetSprite);
                 });
                 sprite.setDepth(lands.length * i + j);
