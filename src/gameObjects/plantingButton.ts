@@ -10,7 +10,7 @@ class PlantingplantingText {
 
     constructor(scene: Phaser.Scene) {
         this.scene = scene;
-        this.plantingText = scene.add.text(0, config.canvasHeight - config.blockHeight / 2, 'うえつける', { fontSize: '20px', color: '#000000' });
+        this.plantingText = scene.add.text(0, config.canvasHeight - config.blockHeight / 2, 'えらんでね', { fontSize: '20px', color: '#000000' });
 
         this.wheatButton = scene.add.text(200, config.canvasHeight - config.blockHeight / 2, 'こむぎ', { fontSize: '20px', color: '#000000' });
         this.wheatButton.setInteractive();

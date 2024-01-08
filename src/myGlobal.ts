@@ -1,5 +1,4 @@
 import { CropType } from './objects/crop';
-import Land from './objects/land';
 
 export enum OperationType {
     plow = 1,

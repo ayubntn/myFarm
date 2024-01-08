@@ -36,12 +36,22 @@ class Crop extends Item {
         this.createdAt = createdAt;
     }
 
-    onClick() {
+    harvest() {
         console.log(this.type + ' ' + this.status);
         if (this.status === CropStatus.harvestable) {
             this.status = CropStatus.harvested;
             Strage.add(this);
         }
+    }
+
+    elapsedSeconds() {
+        return (Date.now() - this.createdAt.getTime()) / 1000;
+    }
+
+    secondsRemaining() {
+        const time = CropGrowthTime[this.type];
+        const elapsedSeconds = this.elapsedSeconds();
+        return Math.floor(time * 3 - elapsedSeconds);
     }
 }
 

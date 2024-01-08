@@ -1,13 +1,15 @@
 import Phaser from "phaser";
 import config from "../GameConfig";
-import Land, {LandType} from "../objects/land";
-import myGlobal, {OperationType} from "../myGlobal";
+import Land, { LandType } from "../objects/land";
+import Crop from "../objects/crop";
+import myGlobal, { OperationType } from "../myGlobal";
 import { CropStatus, CropGrowthTime, CropType } from "../objects/crop";
 import loadImages from "../ImageLoader";
 import PlowButton from "../gameObjects/plowButton";
 import Background from "../gameObjects/background";
 import OperationPanel from "../gameObjects/operationPanel";
 import PlantingButton from "../gameObjects/plantingButton";
+import CropDetailPanel from "../gameObjects/cropDetailPanel";
 
 let lands: Land[][] = [];
 let landSprites: Phaser.Physics.Arcade.Sprite[][] = [];
@@ -15,9 +17,12 @@ let cropSprites: (Phaser.Physics.Arcade.Sprite | null)[][] = [];
 let isDestroy = false;
 let sceneCount = 0;
 let targetLand: Land | null = null;
+let targetCrop: Crop | null = null;
+let harvestTargetCrop: Crop | null = null;
 let targetRect: Phaser.GameObjects.Rectangle | null = null;
 let plowButton: PlowButton | null = null;
 let plantingButton: PlantingButton | null = null;
+let cropDetailPanel: CropDetailPanel | null = null;
 
 class MyScene extends Phaser.Scene {
 
@@ -50,6 +55,7 @@ class MyScene extends Phaser.Scene {
         new OperationPanel(this);
         plowButton = new PlowButton(this);
         plantingButton = new PlantingButton(this);
+        cropDetailPanel = new CropDetailPanel(this);
     }
 
     update() {
@@ -74,7 +80,7 @@ class MyScene extends Phaser.Scene {
                         cropSprites[i][j] = null;
                         continue;
                     }
-                    
+
                     if (!cropSprites[i]) cropSprites[i] = [];
                     if (!cropSprites[i][j]) {
                         const landSprite = landSprites[i][j];
@@ -82,7 +88,11 @@ class MyScene extends Phaser.Scene {
                         cropSprite.setScale(config.textureScale);
                         cropSprite.setInteractive();
                         cropSprite.on('pointerdown', () => {
-                            crop.onClick();
+                            if (crop.status === CropStatus.harvestable) {
+                                harvestTargetCrop = crop;
+                            } else {
+                                targetCrop = crop;
+                            }
                         });
                         cropSprite.setDepth(100 + lands.length * i + j);
                         cropSprites[i][j] = cropSprite;
@@ -97,11 +107,11 @@ class MyScene extends Phaser.Scene {
         // タイマーと成長
         for (let i = 0; i < lands.length; i++) {
             if (!lands[i]) continue;
-            
+
             for (let j = 0; j < lands[i].length; j++) {
                 const land = lands[i][j];
                 if (!land || !land.crop) continue;
-                const nowTime = (Date.now() - land.crop.createdAt.getTime()) / 1000;
+                const nowTime = land.crop.elapsedSeconds();
                 const time = CropGrowthTime[land.crop.type];
                 if (land.crop.status === CropStatus.sowing && nowTime > time) {
                     land.crop.status = CropStatus.germination;
@@ -117,13 +127,22 @@ class MyScene extends Phaser.Scene {
         if (targetLand) {
             plowButton?.setVisible(targetLand.type === LandType.waste);
             plantingButton?.setVisible(targetLand.type === LandType.cultivated);
+            targetCrop = null;
         } else {
             plowButton?.setVisible(false);
             plantingButton?.setVisible(false);
         }
+        if (harvestTargetCrop) {
+            harvestTargetCrop.harvest();
+            harvestTargetCrop = null;
+        }
+        if (targetCrop) {
+            cropDetailPanel?.setCrop(targetCrop);
+            cropDetailPanel?.setVisible(true);
+        }
 
         // 操作
-        if (myGlobal.operation === OperationType.plow)  {
+        if (myGlobal.operation === OperationType.plow) {
             targetLand?.plow();
             myGlobal.operation = null;
         }
@@ -135,8 +154,11 @@ class MyScene extends Phaser.Scene {
         if (myGlobal.clickOutside) {
             targetRect?.destroy();
             targetLand = null;
+            targetCrop = null;
+            harvestTargetCrop = null;
             myGlobal.clickOutside = false;
             myGlobal.operation = null;
+            cropDetailPanel?.setVisible(false);
         }
 
         localStorage.setItem("lands", JSON.stringify(lands));
@@ -183,6 +205,8 @@ class MyScene extends Phaser.Scene {
             landSprites = [];
             cropSprites = [];
             targetLand = null;
+            targetCrop = null;
+            harvestTargetCrop = null;
             targetRect?.destroy();
             myGlobal.doReset();
             this.initLands();
