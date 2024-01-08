@@ -10,6 +10,7 @@ import Background from "../gameObjects/background";
 import OperationPanel from "../gameObjects/operationPanel";
 import PlantingButton from "../gameObjects/plantingButton";
 import CropDetailPanel from "../gameObjects/cropDetailPanel";
+import TargetRect from "../gameObjects/targetRect";
 
 let lands: Land[][] = [];
 let landSprites: Phaser.Physics.Arcade.Sprite[][] = [];
@@ -19,7 +20,7 @@ let sceneCount = 0;
 let targetLand: Land | null = null;
 let targetCrop: Crop | null = null;
 let harvestTargetCrop: Crop | null = null;
-let targetRect: Phaser.GameObjects.Rectangle | null = null;
+let targetRect: TargetRect | null = null;
 let plowButton: PlowButton | null = null;
 let plantingButton: PlantingButton | null = null;
 let cropDetailPanel: CropDetailPanel | null = null;
@@ -88,10 +89,14 @@ class MyScene extends Phaser.Scene {
                         cropSprite.setScale(config.textureScale);
                         cropSprite.setInteractive();
                         cropSprite.on('pointerdown', () => {
+                            console.log('click crop');
+                            targetLand = null;
                             if (crop.status === CropStatus.harvestable) {
                                 harvestTargetCrop = crop;
                             } else {
                                 targetCrop = crop;
+                                targetRect?.destroy();
+                                targetRect = new TargetRect(this, landSprites[i][j]);
                             }
                         });
                         cropSprite.setDepth(100 + lands.length * i + j);
@@ -132,13 +137,15 @@ class MyScene extends Phaser.Scene {
             plowButton?.setVisible(false);
             plantingButton?.setVisible(false);
         }
-        if (harvestTargetCrop) {
-            harvestTargetCrop.harvest();
-            harvestTargetCrop = null;
-        }
         if (targetCrop) {
-            cropDetailPanel?.setCrop(targetCrop);
-            cropDetailPanel?.setVisible(true);
+            if (targetCrop.status === CropStatus.harvestable) {
+                targetCrop = null;
+            } else {
+                cropDetailPanel?.setCrop(targetCrop);
+                cropDetailPanel?.setVisible(true);
+            }
+        } else {
+            cropDetailPanel?.setVisible(false);
         }
 
         // 操作
@@ -151,14 +158,12 @@ class MyScene extends Phaser.Scene {
             myGlobal.operation = null;
             myGlobal.clickOutside = true;
         }
+        if (harvestTargetCrop) {
+            harvestTargetCrop.harvest();
+            this.resetState();
+        }
         if (myGlobal.clickOutside) {
-            targetRect?.destroy();
-            targetLand = null;
-            targetCrop = null;
-            harvestTargetCrop = null;
-            myGlobal.clickOutside = false;
-            myGlobal.operation = null;
-            cropDetailPanel?.setVisible(false);
+            this.resetState();
         }
 
         localStorage.setItem("lands", JSON.stringify(lands));
@@ -175,12 +180,11 @@ class MyScene extends Phaser.Scene {
                 sprite.setScale(config.textureScale);
                 sprite.setInteractive();
                 sprite.on('pointerdown', () => {
+                    console.log('click land');
                     targetLand = land;
                     const targetSprite = landSprites[i][j];
                     targetRect?.destroy();
-                    targetRect = this.add.rectangle(targetSprite.x, targetSprite.y, config.blockWidth, config.blockHeight);
-                    targetRect.setStrokeStyle(4, 0xff6347);
-                    targetRect.setDepth(200);
+                    targetRect = new TargetRect(this, targetSprite);
                 });
                 sprite.setDepth(lands.length * i + j);
                 if (!landSprites[i]) landSprites[i] = [];
@@ -204,13 +208,19 @@ class MyScene extends Phaser.Scene {
             });
             landSprites = [];
             cropSprites = [];
-            targetLand = null;
-            targetCrop = null;
-            harvestTargetCrop = null;
-            targetRect?.destroy();
+            this.resetState();
             myGlobal.doReset();
             this.initLands();
         }
+    }
+
+    resetState() {
+        targetRect?.destroy();
+        targetLand = null;
+        targetCrop = null;
+        harvestTargetCrop = null;
+        myGlobal.clickOutside = false;
+        myGlobal.operation = null;
     }
 }
 
