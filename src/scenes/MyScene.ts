@@ -1,15 +1,23 @@
 import Phaser from "phaser";
 import config from "../GameConfig";
-import Land from "../objects/land";
-import myGlobal from "../myGlobal";
-import { CropStatus, CropGrowthTime } from "../objects/crop";
+import Land, {LandType} from "../objects/land";
+import myGlobal, {OperationType} from "../myGlobal";
+import { CropStatus, CropGrowthTime, CropType } from "../objects/crop";
 import loadImages from "../ImageLoader";
+import PlowButton from "../gameObjects/plowButton";
+import Background from "../gameObjects/background";
+import OperationPanel from "../gameObjects/operationPanel";
+import PlantingButton from "../gameObjects/plantingButton";
 
 let lands: Land[][] = [];
 let landSprites: Phaser.Physics.Arcade.Sprite[][] = [];
 let cropSprites: (Phaser.Physics.Arcade.Sprite | null)[][] = [];
 let isDestroy = false;
 let sceneCount = 0;
+let targetLand: Land | null = null;
+let targetRect: Phaser.GameObjects.Rectangle | null = null;
+let plowButton: PlowButton | null = null;
+let plantingButton: PlantingButton | null = null;
 
 class MyScene extends Phaser.Scene {
 
@@ -30,8 +38,7 @@ class MyScene extends Phaser.Scene {
             return;
         }
 
-        const background = this.add.tileSprite(config.canvasWidth / 2, config.canvasHeight / 2, config.canvasWidth * 2, config.canvasHeight * 2, 'background');
-        background.setScale(config.textureScale);
+        new Background(this);
 
         lands = Land.createListFromStrage();
         this.initLands();
@@ -39,27 +46,15 @@ class MyScene extends Phaser.Scene {
         this.add.image(104, 40, 'strageBar').setScale(config.textureScale);
         const strageIcon = this.physics.add.sprite(40, 40, 'strageIcon');
         strageIcon.setScale(config.textureScale);
+
+        new OperationPanel(this);
+        plowButton = new PlowButton(this);
+        plantingButton = new PlantingButton(this);
     }
 
     update() {
-        //myGlobal.setOperation(OperationType.planting);
-        if (myGlobal.reset) {
-            lands = Land.resetListAndStorage();
-            landSprites.forEach(row => {
-                row.forEach(sprite => {
-                    sprite.destroy();
-                });
-            });
-            cropSprites.forEach(row => {
-                row.forEach(sprite => {
-                    sprite?.destroy();
-                });
-            });
-            landSprites = [];
-            cropSprites = [];
-            this.initLands();
-            myGlobal.reset = false;
-        }
+
+        this.reset();
 
         // 土地と作物の状態更新
         for (let i = 0; i < lands.length; i++) {
@@ -118,6 +113,32 @@ class MyScene extends Phaser.Scene {
             }
         }
 
+        // 操作パネルの表示
+        if (targetLand) {
+            plowButton?.setVisible(targetLand.type === LandType.waste);
+            plantingButton?.setVisible(targetLand.type === LandType.cultivated);
+        } else {
+            plowButton?.setVisible(false);
+            plantingButton?.setVisible(false);
+        }
+
+        // 操作
+        if (myGlobal.operation === OperationType.plow)  {
+            targetLand?.plow();
+            myGlobal.operation = null;
+        }
+        if (myGlobal.operation === OperationType.planting) {
+            targetLand?.planting();
+            myGlobal.operation = null;
+            myGlobal.clickOutside = true;
+        }
+        if (myGlobal.clickOutside) {
+            targetRect?.destroy();
+            targetLand = null;
+            myGlobal.clickOutside = false;
+            myGlobal.operation = null;
+        }
+
         localStorage.setItem("lands", JSON.stringify(lands));
     }
 
@@ -132,13 +153,40 @@ class MyScene extends Phaser.Scene {
                 sprite.setScale(config.textureScale);
                 sprite.setInteractive();
                 sprite.on('pointerdown', () => {
-                    lands[i][j].onClick();
+                    targetLand = land;
+                    const targetSprite = landSprites[i][j];
+                    targetRect?.destroy();
+                    targetRect = this.add.rectangle(targetSprite.x, targetSprite.y, config.blockWidth, config.blockHeight);
+                    targetRect.setStrokeStyle(4, 0xff6347);
+                    targetRect.setDepth(200);
                 });
                 sprite.setDepth(lands.length * i + j);
                 if (!landSprites[i]) landSprites[i] = [];
                 landSprites[i][j] = sprite;
             });
         });
+    }
+
+    reset() {
+        if (myGlobal.reset) {
+            lands = Land.resetListAndStorage();
+            landSprites.forEach(row => {
+                row.forEach(sprite => {
+                    sprite.destroy();
+                });
+            });
+            cropSprites.forEach(row => {
+                row.forEach(sprite => {
+                    sprite?.destroy();
+                });
+            });
+            landSprites = [];
+            cropSprites = [];
+            targetLand = null;
+            targetRect?.destroy();
+            myGlobal.doReset();
+            this.initLands();
+        }
     }
 }
 

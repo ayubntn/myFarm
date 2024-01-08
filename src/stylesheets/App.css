@@ -1,9 +1,16 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #edeaea;
+}
+
 #root {
   text-align: center;
 }
 
 #game {
   text-align: center;
+  line-height: 0;
 }
 
 #game.is-development > canvas:first-child {
@@ -17,16 +24,10 @@
 }
 
 .operations {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  border: 1px solid #ccc;
-  padding: 40px;
 }
 
 .operationBtn {
   display: inline-block;
-  background-color: #4a4a4a;
   padding: 10px 20px;
 }
 

@@ -11,6 +11,6 @@ const config = {
 };
 
 config.canvasWidth = config.blockWidth * 9 + config.gap * (9 - 1);
-config.canvasHeight = config.blockHeight * 7 + config.gap * (7 - 1);
+config.canvasHeight = config.blockHeight * 9 + config.gap * (9 - 1);
 
 export default config;
