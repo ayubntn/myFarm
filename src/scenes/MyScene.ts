@@ -3,7 +3,7 @@ import config from "../GameConfig";
 import Land, { LandType } from "../objects/land";
 import Crop from "../objects/crop";
 import myGlobal, { OperationType } from "../myGlobal";
-import { CropStatus, CropGrowthTime, CropType } from "../objects/crop";
+import { CropStatus, CropGrowthTime } from "../objects/crop";
 import loadImages from "../ImageLoader";
 import PlowButton from "../gameObjects/plowButton";
 import Background from "../gameObjects/background";
