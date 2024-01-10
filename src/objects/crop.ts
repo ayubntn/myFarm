@@ -53,6 +53,18 @@ class Crop extends Item {
         const elapsedSeconds = this.elapsedSeconds();
         return Math.floor(time * 3 - elapsedSeconds);
     }
+
+    updateStatus() {
+        const nowTime = this.elapsedSeconds();
+        const time = CropGrowthTime[this.type];
+        if (this.status === CropStatus.sowing && nowTime > time) {
+            this.status = CropStatus.germination;
+        } else if (this.status === CropStatus.germination && nowTime > time * 2) {
+            this.status = CropStatus.growing;
+        } else if (this.status === CropStatus.growing && nowTime > time * 3) {
+            this.status = CropStatus.harvestable;
+        }
+    }
 }
 
 export default Crop;

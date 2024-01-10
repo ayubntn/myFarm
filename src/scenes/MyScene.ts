@@ -3,7 +3,7 @@ import config from "../GameConfig";
 import Land, { LandType } from "../objects/land";
 import Crop from "../objects/crop";
 import myGlobal, { OperationType } from "../myGlobal";
-import { CropStatus, CropGrowthTime } from "../objects/crop";
+import { CropStatus } from "../objects/crop";
 import loadImages from "../ImageLoader";
 import PlowButton from "../gameObjects/plowButton";
 import Background from "../gameObjects/background";
@@ -73,38 +73,37 @@ class MyScene extends Phaser.Scene {
                 const type = land.type;
                 landSprites[i][j].setTexture(type);
                 const crop = land.crop;
+                if (!crop) continue;
 
-                if (crop) {
-                    if (crop.status === CropStatus.harvested) {
-                        land.crop = undefined;
-                        cropSprites[i][j]?.destroy();
-                        cropSprites[i][j] = null;
-                        continue;
-                    }
-
-                    if (!cropSprites[i]) cropSprites[i] = [];
-                    if (!cropSprites[i][j]) {
-                        const landSprite = landSprites[i][j];
-                        const cropSprite = this.physics.add.sprite(landSprite.x, landSprite.y - 10, crop.type + "_" + crop.status);
-                        cropSprite.setScale(config.textureScale);
-                        cropSprite.setInteractive();
-                        cropSprite.on('pointerdown', () => {
-                            console.log('click crop');
-                            this.resetState();
-                            if (crop.status === CropStatus.harvestable) {
-                                harvestTargetCrop = crop;
-                            } else {
-                                targetCrop = crop;
-                                targetRect = new TargetRect(this, landSprites[i][j]);
-                            }
-                        });
-                        cropSprite.setDepth(100 + lands.length * i + j);
-                        cropSprites[i][j] = cropSprite;
-                    } else {
-                        cropSprites[i][j]?.setTexture(crop.type + "_" + crop.status);
-                    }
-
+                if (crop.status === CropStatus.harvested) {
+                    land.crop = undefined;
+                    cropSprites[i][j]?.destroy();
+                    cropSprites[i][j] = null;
+                    continue;
                 }
+
+                if (!cropSprites[i]) cropSprites[i] = [];
+                if (cropSprites[i][j]) {
+                    cropSprites[i][j]?.setTexture(crop.type + "_" + crop.status);
+                } else {
+                    const landSprite = landSprites[i][j];
+                    const cropSprite = this.physics.add.sprite(landSprite.x, landSprite.y - 10, crop.type + "_" + crop.status);
+                    cropSprite.setScale(config.textureScale);
+                    cropSprite.setInteractive();
+                    cropSprite.on('pointerdown', () => {
+                        console.log('click crop');
+                        this.resetState();
+                        if (crop.status === CropStatus.harvestable) {
+                            harvestTargetCrop = crop;
+                        } else {
+                            targetCrop = crop;
+                            targetRect = new TargetRect(this, landSprites[i][j]);
+                        }
+                    });
+                    cropSprite.setDepth(100 + lands.length * i + j);
+                    cropSprites[i][j] = cropSprite;
+                }
+
             }
         }
 
@@ -115,15 +114,7 @@ class MyScene extends Phaser.Scene {
             for (let j = 0; j < lands[i].length; j++) {
                 const land = lands[i][j];
                 if (!land || !land.crop) continue;
-                const nowTime = land.crop.elapsedSeconds();
-                const time = CropGrowthTime[land.crop.type];
-                if (land.crop.status === CropStatus.sowing && nowTime > time) {
-                    land.crop.status = CropStatus.germination;
-                } else if (land.crop.status === CropStatus.germination && nowTime > time * 2) {
-                    land.crop.status = CropStatus.growing;
-                } else if (land.crop.status === CropStatus.growing && nowTime > time * 3) {
-                    land.crop.status = CropStatus.harvestable;
-                }
+                land.crop.updateStatus();
             }
         }
 
