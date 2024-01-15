@@ -1,8 +1,12 @@
+import {ItemType, ItemName} from "../types/itemType";
+
 class Item {
+    type: ItemType;
     name: string;
 
-    constructor(name: string) {
-        this.name = name;
+    constructor(type: ItemType) {
+        this.type = type;
+        this.name = ItemName[type];
     }
 }
 

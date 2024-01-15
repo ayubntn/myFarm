@@ -11,6 +11,7 @@ type myGlobalType = {
     reset: boolean;
     clickOutside: boolean;
     doReset: () => void;
+    showStrage: boolean;
 }
 
 const myGlobal = {
@@ -24,7 +25,8 @@ const myGlobal = {
         myGlobal.reset = false;
         myGlobal.clickOutside = false;
     
-    }
+    },
+    showStrage: false,
 } as myGlobalType;
 
 export default myGlobal;

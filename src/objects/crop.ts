@@ -1,5 +1,6 @@
 import Item from './item';
 import Strage from './strage';
+import {ItemType} from '../types/itemType';
 
 export enum CropStatus {
     sowing = 'sowing',
@@ -9,29 +10,24 @@ export enum CropStatus {
     harvested = 'harvested',
 }
 
-export enum CropType {
-    wheat = 'wheat',
-    rice = 'rice',
-}
-
-export const CropName = {
-    [CropType.wheat]: 'こむぎ',
-    [CropType.rice]: 'おこめ',
-}
-
 export const CropGrowthTime = {
-    [CropType.wheat]: 3,
-    [CropType.rice]: 6,
+    [ItemType.wheat]: 3,
+    [ItemType.rice]: 6,
+}
+
+export type CropType = ItemType.wheat | ItemType.rice;
+
+const seedMap = {
+    [ItemType.wheat]: ItemType.wheatSeed,
+    [ItemType.rice]: ItemType.riceSeed,
 }
 
 class Crop extends Item {
-    type: CropType;
     status: CropStatus;
     createdAt: Date = new Date();
 
     constructor(type: CropType, status: CropStatus = CropStatus.sowing, createdAt: Date = new Date()) {
-        super(CropName[type]);
-        this.type = type;
+        super(type);
         this.status = status;
         this.createdAt = createdAt;
     }
@@ -41,6 +37,7 @@ class Crop extends Item {
         if (this.status === CropStatus.harvestable) {
             this.status = CropStatus.harvested;
             Strage.add(this);
+            Strage.add(new Item(seedMap[this.type as CropType]), 2);
         }
     }
 
@@ -49,14 +46,14 @@ class Crop extends Item {
     }
 
     secondsRemaining() {
-        const time = CropGrowthTime[this.type];
+        const time = CropGrowthTime[this.type as CropType];
         const elapsedSeconds = this.elapsedSeconds();
         return Math.floor(time * 3 - elapsedSeconds);
     }
 
     updateStatus() {
         const nowTime = this.elapsedSeconds();
-        const time = CropGrowthTime[this.type];
+        const time = CropGrowthTime[this.type as CropType];
         if (this.status === CropStatus.sowing && nowTime > time) {
             this.status = CropStatus.germination;
         } else if (this.status === CropStatus.germination && nowTime > time * 2) {

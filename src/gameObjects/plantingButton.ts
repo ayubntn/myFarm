@@ -1,6 +1,6 @@
 import config from '../GameConfig';
 import myGlobal, {OperationType} from '../myGlobal';
-import {CropType} from '../objects/crop';
+import { ItemType } from '../types/itemType';
 
 class PlantingplantingText {
     scene: Phaser.Scene;
@@ -17,7 +17,7 @@ class PlantingplantingText {
         this.wheatButton.on('pointerdown', () => {
             console.log('こむぎ')
             myGlobal.operation = OperationType.planting;
-            myGlobal.cropType = CropType.wheat;
+            myGlobal.cropType = ItemType.wheat;
         });
 
         this.riceButton = scene.add.text(400, config.canvasHeight - config.blockHeight / 2, 'おこめ', { fontSize: '20px', color: '#000000' });
@@ -25,7 +25,7 @@ class PlantingplantingText {
         this.riceButton.on('pointerdown', () => {
             console.log('おこめ')
             myGlobal.operation = OperationType.planting;
-            myGlobal.cropType = CropType.rice;
+            myGlobal.cropType = ItemType.rice;
         });
     }
 

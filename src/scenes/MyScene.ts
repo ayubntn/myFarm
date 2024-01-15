@@ -10,7 +10,10 @@ import Background from "../gameObjects/background";
 import OperationPanel from "../gameObjects/operationPanel";
 import PlantingButton from "../gameObjects/plantingButton";
 import CropDetailPanel from "../gameObjects/cropDetailPanel";
+import StragePanel from "../gameObjects/stragePanel";
 import TargetRect from "../gameObjects/targetRect";
+import Strage from "../objects/strage";
+import StrageBar from "../gameObjects/strageBar";
 
 let lands: Land[][] = [];
 let landSprites: Phaser.Physics.Arcade.Sprite[][] = [];
@@ -21,6 +24,8 @@ let targetLand: Land | null = null;
 let targetCrop: Crop | null = null;
 let harvestTargetCrop: Crop | null = null;
 let targetRect: TargetRect | null = null;
+let strageBar: StrageBar | null = null;
+let stragePanel: StragePanel | null = null;
 let plowButton: PlowButton | null = null;
 let plantingButton: PlantingButton | null = null;
 let cropDetailPanel: CropDetailPanel | null = null;
@@ -34,6 +39,7 @@ class MyScene extends Phaser.Scene {
 
     preload() {
         loadImages(this);
+        Strage.initFromLocalStorage();
     }
 
     create() {
@@ -49,10 +55,8 @@ class MyScene extends Phaser.Scene {
         lands = Land.createListFromStrage();
         this.initLands();
 
-        this.add.image(104, 40, 'strageBar').setScale(config.textureScale);
-        const strageIcon = this.physics.add.sprite(40, 40, 'strageIcon');
-        strageIcon.setScale(config.textureScale);
-
+        strageBar = new StrageBar(this);
+        stragePanel = new StragePanel(this);
         new OperationPanel(this);
         plowButton = new PlowButton(this);
         plantingButton = new PlantingButton(this);
@@ -155,6 +159,13 @@ class MyScene extends Phaser.Scene {
         if (myGlobal.clickOutside) {
             this.resetState();
         }
+        if (stragePanel) {
+            if (myGlobal.showStrage) {
+                stragePanel.show();
+            } else {
+                stragePanel.hide();
+            }
+        }
 
         localStorage.setItem("lands", JSON.stringify(lands));
     }
@@ -184,24 +195,24 @@ class MyScene extends Phaser.Scene {
     }
 
     reset() {
-        if (myGlobal.reset) {
-            lands = Land.resetListAndStorage();
-            landSprites.forEach(row => {
-                row.forEach(sprite => {
-                    sprite.destroy();
-                });
+        if (!myGlobal.reset) return;
+        Strage.reset();
+        lands = Land.resetListAndStorage();
+        landSprites.forEach(row => {
+            row.forEach(sprite => {
+                sprite.destroy();
             });
-            cropSprites.forEach(row => {
-                row.forEach(sprite => {
-                    sprite?.destroy();
-                });
+        });
+        cropSprites.forEach(row => {
+            row.forEach(sprite => {
+                sprite?.destroy();
             });
-            landSprites = [];
-            cropSprites = [];
-            this.resetState();
-            myGlobal.doReset();
-            this.initLands();
-        }
+        });
+        landSprites = [];
+        cropSprites = [];
+        this.resetState();
+        myGlobal.doReset();
+        this.initLands();
     }
 
     resetState() {
@@ -211,6 +222,7 @@ class MyScene extends Phaser.Scene {
         harvestTargetCrop = null;
         myGlobal.clickOutside = false;
         myGlobal.operation = null;
+        myGlobal.showStrage = false;
     }
 }
 

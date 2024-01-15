@@ -1,6 +1,8 @@
 import backgroundImage from "./assets/background.png";
+import woodBackgroundImage from "./assets/woodBackground.png";
 import strageIcon from "./assets/strageIcon.png";
 import strageBar from "./assets/strageBar.png";
+import closeIcon from "./assets/closeIcon.png";
 
 import wastelandImage from "./assets/wasteland.png";
 import cultivatedLandImage from "./assets/cultivatedLand.png";
@@ -18,8 +20,10 @@ import riceHarvestableImage from "./assets/rice/harvestable.png";
 
 const loadImages = (scene: Phaser.Scene) => {
     scene.load.image("background", backgroundImage);
+    scene.load.image("woodBackground", woodBackgroundImage);
     scene.load.image("strageIcon", strageIcon);
     scene.load.image("strageBar", strageBar);
+    scene.load.image("closeIcon", closeIcon);
 
     scene.load.image("wasteland", wastelandImage);
     scene.load.image("cultivatedLand", cultivatedLandImage);
