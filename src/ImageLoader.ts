@@ -18,6 +18,11 @@ import riceGerminationImage from "./assets/rice/germination.png";
 import riceGrowingImage from "./assets/rice/growing.png";
 import riceHarvestableImage from "./assets/rice/harvestable.png";
 
+import riceIcon from "./assets/icon/rice.png";
+import riceSeedIcon from "./assets/icon/riceSeed.png";
+import wheatIcon from "./assets/icon/wheat.png";
+import wheatSeedIcon from "./assets/icon/wheatSeed.png";
+
 const loadImages = (scene: Phaser.Scene) => {
     scene.load.image("background", backgroundImage);
     scene.load.image("woodBackground", woodBackgroundImage);
@@ -38,6 +43,11 @@ const loadImages = (scene: Phaser.Scene) => {
     scene.load.image("rice_germination", riceGerminationImage);
     scene.load.image("rice_growing", riceGrowingImage);
     scene.load.image("rice_harvestable", riceHarvestableImage);
+
+    scene.load.image("riceIcon", riceIcon);
+    scene.load.image("riceSeedIcon", riceSeedIcon);
+    scene.load.image("wheatIcon", wheatIcon);
+    scene.load.image("wheatSeedIcon", wheatSeedIcon);
 };
 
 export default loadImages;
