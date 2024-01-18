@@ -1,6 +1,6 @@
 import Item from './item';
 import Strage from './strage';
-import {ItemType} from '../types/itemType';
+import {ItemType, CropType, seedMap} from '../types/itemType';
 
 export enum CropStatus {
     sowing = 'sowing',
@@ -13,13 +13,6 @@ export enum CropStatus {
 export const CropGrowthTime = {
     [ItemType.wheat]: 3,
     [ItemType.rice]: 6,
-}
-
-export type CropType = ItemType.wheat | ItemType.rice;
-
-const seedMap = {
-    [ItemType.wheat]: ItemType.wheatSeed,
-    [ItemType.rice]: ItemType.riceSeed,
 }
 
 class Crop extends Item {

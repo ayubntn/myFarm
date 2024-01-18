@@ -5,10 +5,10 @@ import Crop from "../objects/crop";
 import myGlobal, { OperationType } from "../myGlobal";
 import { CropStatus } from "../objects/crop";
 import loadImages from "../ImageLoader";
-import PlowButton from "../gameObjects/plowButton";
+import PlowPanel from "../gameObjects/plowPanel";
 import Background from "../gameObjects/background";
 import OperationPanel from "../gameObjects/operationPanel";
-import PlantingButton from "../gameObjects/plantingButton";
+import PlantingPanel from "../gameObjects/plantingPanel";
 import CropDetailPanel from "../gameObjects/cropDetailPanel";
 import StragePanel from "../gameObjects/stragePanel";
 import TargetRect from "../gameObjects/targetRect";
@@ -26,8 +26,8 @@ let harvestTargetCrop: Crop | null = null;
 let targetRect: TargetRect | null = null;
 let strageBar: StrageBar | null = null;
 let stragePanel: StragePanel | null = null;
-let plowButton: PlowButton | null = null;
-let plantingButton: PlantingButton | null = null;
+let plowPanel: PlowPanel | null = null;
+let plantingPanel: PlantingPanel | null = null;
 let cropDetailPanel: CropDetailPanel | null = null;
 
 class MyScene extends Phaser.Scene {
@@ -57,9 +57,9 @@ class MyScene extends Phaser.Scene {
 
         strageBar = new StrageBar(this);
         stragePanel = new StragePanel(this);
-        new OperationPanel(this);
-        plowButton = new PlowButton(this);
-        plantingButton = new PlantingButton(this);
+        const operationPanel = new OperationPanel(this);
+        plowPanel = new PlowPanel(this);
+        plantingPanel = new PlantingPanel(this, operationPanel);
         cropDetailPanel = new CropDetailPanel(this);
     }
 
@@ -124,12 +124,16 @@ class MyScene extends Phaser.Scene {
 
         // 操作パネルの表示
         if (targetLand) {
-            plowButton?.setVisible(targetLand.type === LandType.waste);
-            plantingButton?.setVisible(targetLand.type === LandType.cultivated);
+            plowPanel?.setVisible(targetLand.type === LandType.waste);
+            if (targetLand.type === LandType.cultivated) {
+                plantingPanel?.show();
+            } else {
+                plantingPanel?.hide();
+            }
             targetCrop = null;
         } else {
-            plowButton?.setVisible(false);
-            plantingButton?.setVisible(false);
+            plowPanel?.setVisible(false);
+            plantingPanel?.hide();
         }
         if (targetCrop) {
             if (targetCrop.status === CropStatus.harvestable) {

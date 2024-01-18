@@ -1,7 +1,7 @@
 import config from '../GameConfig';
 import myGlobal, {OperationType} from '../myGlobal';
 
-class PlowButton {
+class PlowPanel {
     scene: Phaser.Scene;
     button: Phaser.GameObjects.Text;
 
@@ -20,4 +20,4 @@ class PlowButton {
     }
 }
 
-export default PlowButton;
+export default PlowPanel;
