@@ -1,7 +1,7 @@
 import config from '../GameConfig';
 import myGlobal, { OperationType } from '../myGlobal';
 import Item from '../objects/item';
-import { ItemType, cropMap } from '../types/itemType';
+import { CropType, ItemType, cropMap } from '../types/itemType';
 import OperationPanel from './operationPanel';
 import Strage from '../objects/strage';
 
@@ -66,7 +66,7 @@ class PlantingPanel {
 
     clickItem(key: ItemType) {
         myGlobal.operation = OperationType.planting;
-        myGlobal.cropType = cropMap[key];
+        myGlobal.cropType = cropMap[key] as CropType;
         Strage.remove(new Item(key));
     }
 }
