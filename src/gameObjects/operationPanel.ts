@@ -19,6 +19,10 @@ class OperationPanel {
     getTopLeft() {
         return this.panel.getTopLeft();
     }
+
+    getCenter() {
+        return this.panel.getCenter();
+    }
 }
 
 export default OperationPanel;

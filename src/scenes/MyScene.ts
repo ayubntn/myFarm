@@ -58,7 +58,7 @@ class MyScene extends Phaser.Scene {
         strageBar = new StrageBar(this);
         stragePanel = new StragePanel(this);
         const operationPanel = new OperationPanel(this);
-        plowPanel = new PlowPanel(this);
+        plowPanel = new PlowPanel(this, operationPanel);
         plantingPanel = new PlantingPanel(this, operationPanel);
         cropDetailPanel = new CropDetailPanel(this);
     }
@@ -93,7 +93,7 @@ class MyScene extends Phaser.Scene {
                     const landSprite = landSprites[i][j];
                     const cropSprite = this.physics.add.sprite(landSprite.x, landSprite.y - 10, crop.type + "_" + crop.status);
                     cropSprite.setScale(config.textureScale);
-                    cropSprite.setInteractive();
+                    cropSprite.setInteractive({cursor: 'pointer'});
                     cropSprite.on('pointerdown', () => {
                         console.log('click crop');
                         this.resetState();
@@ -171,6 +171,9 @@ class MyScene extends Phaser.Scene {
             }
         }
 
+        if (strageBar && (myGlobal.addStrage || myGlobal.subStrage)) {
+            strageBar.update();
+        }
         localStorage.setItem("lands", JSON.stringify(lands));
     }
 

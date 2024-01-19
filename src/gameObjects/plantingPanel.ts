@@ -14,7 +14,12 @@ class PlantingPanel {
     constructor(scene: Phaser.Scene, operationPanel: OperationPanel) {
         this.scene = scene;
         this.operationPanel = operationPanel;
-        const plantingText = scene.add.text(20, config.canvasHeight - config.blockHeight / 2, 'えらんでね', { fontSize: '20px', color: '#000000' });
+        const plantingText = scene.add.text(
+            20,
+            config.canvasHeight - config.blockHeight / 2,
+            'えらんでね',
+            { fontSize: '20px', color: '#000000' }
+        );
         plantingText.setY(plantingText.y - plantingText.height / 2);
         this.group = scene.add.group([plantingText]);
         this.hide();
@@ -45,12 +50,14 @@ class PlantingPanel {
             const item = Strage.items[key];
             if (!Item.isSeed(key as ItemType)) continue;
             const icon = this.scene.add.image(basePoint.x + num * 100, basePoint.y + 40, key + 'Icon');
-            icon.setInteractive();
+            icon.setInteractive({cursor: 'pointer'});
             icon.setScale(config.textureScale);
             icon.setDepth(1001);
             icon.on('pointerdown', () => this.clickItem(key as ItemType));
             const numText = this.scene.add.text(icon.x + 20, icon.y, '×' + item.toString(), { fontSize: '15px', color: '#000000' });
+            numText.setInteractive({cursor: 'pointer'});
             numText.setDepth(1001);
+            numText.on('pointerdown', () => this.clickItem(key as ItemType));
             this.itemGroup.add(icon);
             this.itemGroup.add(numText);
             num++;
@@ -60,6 +67,7 @@ class PlantingPanel {
     clickItem(key: ItemType) {
         myGlobal.operation = OperationType.planting;
         myGlobal.cropType = cropMap[key];
+        Strage.remove(new Item(key));
     }
 }
 

@@ -1,4 +1,4 @@
-import { CropType } from './objects/crop';
+import { CropType } from './types/itemType';
 
 export enum OperationType {
     plow = 1,
@@ -12,6 +12,8 @@ type myGlobalType = {
     clickOutside: boolean;
     doReset: () => void;
     showStrage: boolean;
+    addStrage: boolean;
+    subStrage: boolean;
 }
 
 const myGlobal = {
@@ -24,9 +26,11 @@ const myGlobal = {
         myGlobal.cropType = null;
         myGlobal.reset = false;
         myGlobal.clickOutside = false;
-    
+
     },
     showStrage: false,
+    addStrage: false,
+    subStrage: false,
 } as myGlobalType;
 
 export default myGlobal;

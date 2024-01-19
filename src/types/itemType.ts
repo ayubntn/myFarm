@@ -1,5 +1,3 @@
-import Crop from "../objects/crop";
-
 export enum ItemType {
     wheat = 'wheat',
     rice = 'rice',

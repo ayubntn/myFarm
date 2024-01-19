@@ -1,4 +1,6 @@
 import Item from './item';
+import { ItemType } from '../types/itemType';
+import myGlobal from '../myGlobal';
 
 const items: { [key: string]: number } = {};
 
@@ -17,10 +19,28 @@ const Strage = {
         Strage.items[item.type] += num;
         console.log(Strage.items);
         localStorage.setItem('strage', JSON.stringify(Strage.items));
+        myGlobal.addStrage = true;
+    },
+    remove: (item: Item, num = 1) => {
+        if (!Strage.items[item.type]) {
+            return;
+        }
+        if (Strage.items[item.type] <= num) {
+            delete Strage.items[item.type];
+        } else {
+            Strage.items[item.type] -= num;
+        }
+        localStorage.setItem('strage', JSON.stringify(Strage.items));
+        myGlobal.subStrage = true;
+    },
+    count: () => {
+        return Object.values(Strage.items).reduce((a, b) => a + b, 0);
     },
     reset() {
         localStorage.removeItem('strage');
         Strage.items = {};
+        this.add(new Item(ItemType.wheatSeed));
+        this.add(new Item(ItemType.riceSeed));
     }
 }
 
