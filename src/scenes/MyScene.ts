@@ -4,6 +4,7 @@ import Land, { LandType } from "../objects/land";
 import Crop from "../objects/crop";
 import myGlobal, { OperationType } from "../myGlobal";
 import { CropStatus } from "../objects/crop";
+import { ItemType } from "../types/itemType";
 import loadImages from "../ImageLoader";
 import PlowPanel from "../gameObjects/plowPanel";
 import Background from "../gameObjects/background";
@@ -61,6 +62,17 @@ class MyScene extends Phaser.Scene {
         plowPanel = new PlowPanel(this, operationPanel);
         plantingPanel = new PlantingPanel(this, operationPanel);
         cropDetailPanel = new CropDetailPanel(this);
+
+
+        [ItemType.wheat, ItemType.rice].forEach(type => {
+            this.anims.create({
+                key: type + '_harvestable_anim',
+                frames: this.anims.generateFrameNumbers(type + '_harvestable'),
+                frameRate: 3,
+                repeat: -1
+            });
+        });
+
     }
 
     update() {
@@ -88,12 +100,16 @@ class MyScene extends Phaser.Scene {
 
                 if (!cropSprites[i]) cropSprites[i] = [];
                 if (cropSprites[i][j]) {
-                    cropSprites[i][j]?.setTexture(crop.type + "_" + crop.status);
+                    if (crop.status === CropStatus.harvestable) {
+                        cropSprites[i][j]?.anims.play(crop.type + '_harvestable_anim', true);
+                    } else {
+                        cropSprites[i][j]?.setTexture(crop.type + "_" + crop.status);
+                    }
                 } else {
                     const landSprite = landSprites[i][j];
                     const cropSprite = this.physics.add.sprite(landSprite.x, landSprite.y - 10, crop.type + "_" + crop.status);
                     cropSprite.setScale(config.textureScale);
-                    cropSprite.setInteractive({cursor: 'pointer'});
+                    cropSprite.setInteractive({ cursor: 'pointer' });
                     cropSprite.on('pointerdown', () => {
                         console.log('click crop');
                         this.resetState();

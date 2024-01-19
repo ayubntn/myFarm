@@ -6,6 +6,7 @@ const BAR_WIDTH = 110;
 
 class StrageBar {
     scene: Phaser.Scene;
+    strageIcon: Phaser.Physics.Arcade.Sprite;
     bar: Phaser.GameObjects.Rectangle;
     text: Phaser.GameObjects.Text;
 
@@ -24,6 +25,8 @@ class StrageBar {
         strageIcon.on('pointerdown', () => {
             this.onClick();
         });
+        this.strageIcon = strageIcon;
+
         const barBg = scene.add.rectangle(125, 40, BAR_WIDTH, 20, 0xcccccc);
         this.bar = scene.add.rectangle(barBg.getTopLeft().x, 40, 0, 20, 0x00bfff);
 
@@ -42,12 +45,26 @@ class StrageBar {
     update() {
         this.bar.width = BAR_WIDTH * Strage.count() / config.strageLimit;
         this.text.setText(this.limitText());
+        if (myGlobal.addStrage) {
+            this.boxingAnimation();
+        }
         myGlobal.addStrage = false;
         myGlobal.subStrage = false;
     }
 
     limitText() {
         return `${Strage.count()}/${config.strageLimit}`;
+    }
+
+    boxingAnimation() {
+        this.scene.add.tween({
+            targets: [this.strageIcon],
+            duration: 200,
+            scale: 0.7,
+            ease: 'Sine.easeInOut',
+            yoyo: true,
+            repeat: 0
+        });
     }
 }
 
