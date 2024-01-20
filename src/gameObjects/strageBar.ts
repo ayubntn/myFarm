@@ -1,10 +1,12 @@
 import config from '../GameConfig';
 import myGlobal from '../myGlobal';
 import Strage from '../objects/strage';
+import MovingItem from '../animObjects/MovingItem';
 
 const BAR_WIDTH = 110;
 
 class StrageBar {
+    static iconPosition = { x: 40, y: 40 };
     scene: Phaser.Scene;
     strageIcon: Phaser.Physics.Arcade.Sprite;
     bar: Phaser.GameObjects.Rectangle;
@@ -19,7 +21,7 @@ class StrageBar {
         image.on('pointerdown', () => {
             this.onClick();
         });
-        const strageIcon = scene.physics.add.sprite(40, 40, 'strageIcon');
+        const strageIcon = scene.physics.add.sprite(StrageBar.iconPosition.x, StrageBar.iconPosition.y, 'strageIcon');
         strageIcon.setScale(config.textureScale);
         strageIcon.setInteractive();
         strageIcon.on('pointerdown', () => {
@@ -63,7 +65,8 @@ class StrageBar {
             scale: 0.7,
             ease: 'Sine.easeInOut',
             yoyo: true,
-            repeat: 0
+            repeat: 0,
+            delay: MovingItem.totalTime()
         });
     }
 }

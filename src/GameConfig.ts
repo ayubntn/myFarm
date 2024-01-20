@@ -8,7 +8,7 @@ const config = {
     landAreaX: 81 * 2,
     landAreaY: 83,
     gap: 1,
-    strageLimit: 50,
+    strageLimit: 100,
 };
 
 config.canvasWidth = config.blockWidth * 9 + config.gap * (9 - 1);

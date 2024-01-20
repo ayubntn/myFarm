@@ -15,6 +15,7 @@ import StragePanel from "../gameObjects/stragePanel";
 import TargetRect from "../gameObjects/targetRect";
 import Strage from "../objects/strage";
 import StrageBar from "../gameObjects/strageBar";
+import MovingItem from "../animObjects/MovingItem";
 
 let lands: Land[][] = [];
 let landSprites: Phaser.Physics.Arcade.Sprite[][] = [];
@@ -92,8 +93,13 @@ class MyScene extends Phaser.Scene {
                 if (!crop) continue;
 
                 if (crop.status === CropStatus.harvested) {
+                    const sprite = cropSprites[i][j];
+                    if (sprite) {
+                        new MovingItem(this, crop, { x: sprite.x, y: sprite.y }, { x: StrageBar.iconPosition.x, y: StrageBar.iconPosition.y });
+                        //new MovingItem(this, crop.seedType(), { x: sprite.x, y: sprite.y }, { x: StrageBar.iconPosition.x, y: StrageBar.iconPosition.y });
+                        sprite.destroy();
+                    }
                     land.crop = undefined;
-                    cropSprites[i][j]?.destroy();
                     cropSprites[i][j] = null;
                     continue;
                 }

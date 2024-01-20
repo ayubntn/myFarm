@@ -30,8 +30,12 @@ class Crop extends Item {
         if (this.status === CropStatus.harvestable) {
             this.status = CropStatus.harvested;
             Strage.add(this);
-            Strage.add(new Item(seedMap[this.type as CropType]), 2);
+            Strage.add(new Item(this.seedType()), 2);
         }
+    }
+    
+    seedType() {
+        return seedMap[this.type as CropType];
     }
 
     elapsedSeconds() {
