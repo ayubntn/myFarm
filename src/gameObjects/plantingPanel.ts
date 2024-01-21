@@ -26,6 +26,11 @@ class PlantingPanel {
         this.itemGroup = scene.add.group();
     }
 
+    getCenter() {
+        const center = this.operationPanel.getCenter();
+        return {x: center.x || 0, y: center.y || 0};
+    }
+
     show() {
         if (this.group.active) return;
         this.group.setActive(true);
@@ -50,12 +55,12 @@ class PlantingPanel {
             const item = Strage.items[key];
             if (!Item.isSeed(key as ItemType)) continue;
             const icon = this.scene.add.image(basePoint.x + num * 100, basePoint.y + 40, key + 'Icon');
-            icon.setInteractive({cursor: 'pointer'});
+            icon.setInteractive({ cursor: 'pointer' });
             icon.setScale(config.textureScale);
             icon.setDepth(1001);
             icon.on('pointerdown', () => this.clickItem(key as ItemType));
             const numText = this.scene.add.text(icon.x + 20, icon.y, '×' + item.toString(), { fontSize: '15px', color: '#000000' });
-            numText.setInteractive({cursor: 'pointer'});
+            numText.setInteractive({ cursor: 'pointer' });
             numText.setDepth(1001);
             numText.on('pointerdown', () => this.clickItem(key as ItemType));
             this.itemGroup.add(icon);
