@@ -3,6 +3,7 @@ import { CropType } from './types/itemType';
 export enum OperationType {
     plow = 1,
     planting = 2,
+    changeLandType = 3,
 }
 
 type myGlobalType = {

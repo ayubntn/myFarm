@@ -34,8 +34,12 @@ class Land {
         }
     }
 
+    plowable() {
+        return this.type === LandType.waste || this.type === LandType.grass;
+    }
+
     plow() {
-        if (this.type === LandType.waste) {
+        if (this.plowable()) {
             this.type = LandType.cultivated;
         }
     }
@@ -47,6 +51,20 @@ class Land {
                 this.crop = new Crop(myGlobal.cropType);
             }
         }
+    }
+
+    changeType() {
+        if (this.type === LandType.cultivated) return;
+
+        if (this.type === LandType.waste) {
+            this.type = LandType.grass;
+        } else {
+            this.type = LandType.waste;
+        }
+    }
+
+    changeTypeToWaste() {
+        this.type = LandType.waste;
     }
 
     static createListFromStrage() {
@@ -73,10 +91,12 @@ class Land {
 
     static createDefaultList() {
         const lands: Land[][] = [];
+        const types = [LandType.waste, LandType.grass];
         for (let i = 0; i < config.landSize.width; i++) {
             for (let j = 0; j < config.landSize.height; j++) {
                 if (!lands[i]) lands[i] = [];
-                lands[i][j] = new Land(LandType.waste);
+                const random = Math.floor(Math.random() * 2);
+                lands[i][j] = new Land(types[random]);
             }
         }
         return lands;

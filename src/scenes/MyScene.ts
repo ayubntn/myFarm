@@ -120,6 +120,7 @@ class MyScene extends Phaser.Scene {
                         this.resetState();
                         if (crop.status === CropStatus.harvestable) {
                             harvestTargetCrop = crop;
+                            targetLand = land;
                         } else {
                             targetCrop = crop;
                             targetRect = new TargetRect(this, landSprites[i][j]);
@@ -144,17 +145,19 @@ class MyScene extends Phaser.Scene {
         }
 
         // 操作パネルの表示
-        if (targetLand) {
-            plowPanel?.setVisible(targetLand.type === LandType.waste);
-            if (targetLand.type === LandType.cultivated) {
-                plantingPanel?.show();
+        if (!harvestTargetCrop) {
+            if (targetLand) {
+                plowPanel?.setVisible(targetLand.plowable());
+                if (targetLand.type === LandType.cultivated) {
+                    plantingPanel?.show();
+                } else {
+                    plantingPanel?.hide();
+                }
+                targetCrop = null;
             } else {
+                plowPanel?.setVisible(false);
                 plantingPanel?.hide();
             }
-            targetCrop = null;
-        } else {
-            plowPanel?.setVisible(false);
-            plantingPanel?.hide();
         }
         if (targetCrop) {
             if (targetCrop.status === CropStatus.harvestable) {
@@ -177,8 +180,13 @@ class MyScene extends Phaser.Scene {
             myGlobal.operation = null;
             myGlobal.clickOutside = true;
         }
+        if (myGlobal.operation === OperationType.changeLandType) {
+            targetLand?.changeType();
+            myGlobal.operation = null;
+        }
         if (harvestTargetCrop) {
             harvestTargetCrop.harvest();
+            targetLand?.changeTypeToWaste();
             this.resetState();
         }
         if (myGlobal.clickOutside) {

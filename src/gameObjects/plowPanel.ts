@@ -5,26 +5,29 @@ import OperationPanel from './operationPanel';
 class PlowPanel {
     scene: Phaser.Scene;
     operationPanel: OperationPanel;
-    button: Phaser.GameObjects.Text;
+    group: Phaser.GameObjects.Group;
 
     constructor(scene: Phaser.Scene, operationPanel: OperationPanel) {
         this.scene = scene;
         this.operationPanel = operationPanel;
-        this.button = scene.add.text(
-            20,
-            config.canvasHeight - config.blockHeight / 2,
-            'たがやす',
-            { fontSize: '20px', color: '#000000' }
-        );
-        this.button.setY(this.button.y - this.button.height / 2);
-        this.button.setInteractive({ cursor: 'pointer' });
-        this.button.on('pointerdown', () => {
+        const plowButton = scene.add.image(220, operationPanel.getCenter().y || 0, 'plowButton');
+        plowButton.setScale(config.textureScale);
+        plowButton.setInteractive({ cursor: 'pointer' });
+        plowButton.on('pointerdown', () => {
             myGlobal.operation = OperationType.plow;
         });
+
+        const changeButton = scene.add.image(470, operationPanel.getCenter().y || 0, 'changeButton');
+        changeButton.setScale(config.textureScale);
+        changeButton.setInteractive({ cursor: 'pointer' });
+        changeButton.on('pointerdown', () => {
+            myGlobal.operation = OperationType.changeLandType;
+        });
+        this.group = scene.add.group([plowButton, changeButton]);
     }
 
     setVisible(visible: boolean) {
-        this.button.setVisible(visible);
+        this.group.setVisible(visible);
     }
 }
 
