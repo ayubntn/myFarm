@@ -1,6 +1,7 @@
 import config from '../GameConfig';
 import myGlobal from '../myGlobal';
 import Strage from '../objects/strage';
+import Text from './text';
 
 class StragePanel {
     scene: Phaser.Scene;
@@ -19,14 +20,15 @@ class StragePanel {
             0xffffff
         );
         rect.setInteractive();
-        const title = this.scene.add.text(
+
+        const title = new Text(this.scene,
             rect.x,
             (rect.getTopCenter().y || 0) + 20,
             'そうこ',
-            { fontSize: '20px', color: '#000000' }
-        );
+        )
+
         this.rect = rect;
-        title.setX(title.x - title.width / 2);
+
         const closeIcon = this.scene.add.image(
             (rect.getBottomRight().x || 0) - 5,
             (rect.getTopLeft().y || 0) + 5,
@@ -64,7 +66,7 @@ class StragePanel {
 
     showItems() {
         this.itemGroup = this.scene.add.group();
-        const basePoint = {x: (this.rect.getTopLeft().x || 0) - 30, y: this.rect.getTopLeft().y || 0};
+        const basePoint = { x: (this.rect.getTopLeft().x || 0) - 30, y: this.rect.getTopLeft().y || 0 };
         let num = 1;
         for (const key in Strage.items) {
             const item = Strage.items[key];
