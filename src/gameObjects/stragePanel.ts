@@ -2,6 +2,7 @@ import config from '../GameConfig';
 import myGlobal from '../myGlobal';
 import Strage from '../objects/strage';
 import Text from './text';
+import {ItemName, ItemType} from '../types/itemType';
 
 class StragePanel {
     scene: Phaser.Scene;
@@ -35,7 +36,7 @@ class StragePanel {
             'closeIcon'
         );
         closeIcon.setScale(config.textureScale);
-        closeIcon.setInteractive();
+        closeIcon.setInteractive({ cursor: 'pointer'});
         closeIcon.on('pointerdown', () => {
             this.hide();
         });
@@ -74,10 +75,13 @@ class StragePanel {
             icon.setInteractive();
             icon.setScale(config.textureScale);
             icon.setDepth(1001);
-            const numText = new Text(this.scene, icon.x + 30, icon.y, '×' + item.toString(), { fontSize: '15px' });
+            const numText = new Text(this.scene, icon.x + 30, icon.y, '×' + item.toString(), { fontSize: '12px' });
             numText.setDepth(1001);
+            const name = new Text(this.scene, icon.x + 10, icon.y + 25, ItemName[key as ItemType], { fontSize: '10px' });
+            name.setDepth(1001);
             this.itemGroup.add(icon);
             this.itemGroup.add(numText);
+            this.itemGroup.add(name);
             num++;
         }
     }

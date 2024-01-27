@@ -1,7 +1,7 @@
 import config from '../GameConfig';
 import myGlobal, { OperationType } from '../myGlobal';
 import Item from '../objects/item';
-import { CropType, ItemType, cropMap } from '../types/itemType';
+import { CropType, ItemType, cropMap, ItemName } from '../types/itemType';
 import OperationPanel from './operationPanel';
 import Strage from '../objects/strage';
 import Text from './text';
@@ -49,7 +49,7 @@ class PlantingPanel {
 
     showItems() {
         this.itemGroup = this.scene.add.group();
-        const basePoint = { x: (this.operationPanel.getTopLeft().x || 0) + 100, y: this.operationPanel.getTopLeft().y || 0 };
+        const basePoint = { x: (this.operationPanel.getTopLeft().x || 0) + 100, y: (this.operationPanel.getTopLeft().y || 0) - 10 };
         let num = 1;
         for (const key in Strage.items) {
             const item = Strage.items[key];
@@ -59,12 +59,17 @@ class PlantingPanel {
             icon.setScale(config.textureScale);
             icon.setDepth(1001);
             icon.on('pointerdown', () => this.clickItem(key as ItemType));
-            const numText = new Text(this.scene, icon.x + 30, icon.y, '×' + item.toString(), { fontSize: '15px' });
+            const numText = new Text(this.scene, icon.x + 30, icon.y, '×' + item.toString(), { fontSize: '12px' });
             numText.setInteractive({ cursor: 'pointer' });
             numText.setDepth(1001);
             numText.on('pointerdown', () => this.clickItem(key as ItemType));
+            const name = new Text(this.scene, icon.x + 10, icon.y + 20, ItemName[key as ItemType], { fontSize: '10px' });
+            name.setInteractive({ cursor: 'pointer' });
+            name.setDepth(1001);
+            name.on('pointerdown', () => this.clickItem(key as ItemType));
             this.itemGroup.add(icon);
             this.itemGroup.add(numText);
+            this.itemGroup.add(name);
             num++;
         }
     }

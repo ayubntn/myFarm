@@ -2,6 +2,7 @@ import config from '../GameConfig';
 import myGlobal from '../myGlobal';
 import Strage from '../objects/strage';
 import MovingItem from '../animObjects/MovingItem';
+import Text from './text';
 
 const BAR_WIDTH = 110;
 
@@ -17,13 +18,13 @@ class StrageBar {
 
         const image = scene.add.image(104, 40, 'strageBar')
         image.setScale(config.textureScale);
-        image.setInteractive();
+        image.setInteractive({ cursor: 'pointer'});
         image.on('pointerdown', () => {
             this.onClick();
         });
         const strageIcon = scene.physics.add.sprite(StrageBar.iconPosition.x, StrageBar.iconPosition.y, 'strageIcon');
         strageIcon.setScale(config.textureScale);
-        strageIcon.setInteractive();
+        strageIcon.setInteractive({ cursor: 'pointer'});
         strageIcon.on('pointerdown', () => {
             this.onClick();
         });
@@ -32,8 +33,7 @@ class StrageBar {
         const barBg = scene.add.rectangle(125, 40, BAR_WIDTH, 20, 0xcccccc);
         this.bar = scene.add.rectangle(barBg.getTopLeft().x, 40, 0, 20, 0x00bfff);
 
-        this.text = scene.add.text(barBg.x, barBg.y, this.limitText(), { fontSize: '15px', color: '#000000' });
-        this.text.setX(this.text.x - this.text.width / 2);
+        this.text = new Text(scene, barBg.x, barBg.y, this.limitText(), { fontSize: '12px' });
         this.text.setY(this.text.y - this.text.height / 2);
 
         this.update();

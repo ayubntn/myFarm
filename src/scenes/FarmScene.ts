@@ -16,6 +16,7 @@ import TargetRect from "../gameObjects/targetRect";
 import Strage from "../objects/strage";
 import StrageBar from "../gameObjects/strageBar";
 import BoxingCropAnim from "../animObjects/BoxingCropAnim";
+import SceneNav from "../gameObjects/sceneNav";
 
 let lands: Land[][] = [];
 let landSprites: Phaser.Physics.Arcade.Sprite[][] = [];
@@ -69,9 +70,7 @@ class FarmScene extends Phaser.Scene {
         plowPanel = new PlowPanel(this, operationPanel);
         plantingPanel = new PlantingPanel(this, operationPanel);
         cropDetailPanel = new CropDetailPanel(this);
-        this.add.image(100, 400, 'storeIcon').setScale(config.textureScale).setInteractive().on('pointerdown', () => {
-            myGlobal.setCurrentScene('store');
-        });
+        new SceneNav(this);
 
         [ItemType.wheat, ItemType.rice].forEach(type => {
             this.anims.create({

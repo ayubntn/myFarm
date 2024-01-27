@@ -4,6 +4,7 @@ import strageIcon from "./assets/strageIcon.png";
 import strageBar from "./assets/strageBar.png";
 import closeIcon from "./assets/closeIcon.png";
 import storeIcon from "./assets/storeIcon.png";
+import kitchenIcon from "./assets/kitchenIcon.png";
 
 import wastelandImage from "./assets/wasteland.png";
 import cultivatedLandImage from "./assets/cultivatedLand.png";
@@ -26,6 +27,7 @@ import wheatSeedIcon from "./assets/icon/wheatSeed.png";
 
 import plowButton from "./assets/plowButton.png";
 import changeButton from "./assets/changeButton.png";
+import goToFarmButton from "./assets/goToFarmButton.png";
 
 const loadImages = (scene: Phaser.Scene) => {
     scene.load.image("background", backgroundImage);
@@ -34,6 +36,7 @@ const loadImages = (scene: Phaser.Scene) => {
     scene.load.image("strageBar", strageBar);
     scene.load.image("closeIcon", closeIcon);
     scene.load.image("storeIcon", storeIcon);
+    scene.load.image("kitchenIcon", kitchenIcon);
 
     scene.load.image("wasteland", wastelandImage);
     scene.load.image("cultivatedLand", cultivatedLandImage);
@@ -56,6 +59,7 @@ const loadImages = (scene: Phaser.Scene) => {
 
     scene.load.image("plowButton", plowButton);
     scene.load.image("changeButton", changeButton);
+    scene.load.image("goToFarmButton", goToFarmButton);
 };
 
 export default loadImages;
