@@ -63,7 +63,9 @@ class MyScene extends Phaser.Scene {
         plowPanel = new PlowPanel(this, operationPanel);
         plantingPanel = new PlantingPanel(this, operationPanel);
         cropDetailPanel = new CropDetailPanel(this);
-
+        this.add.image(100, 400, 'storeIcon').setScale(config.textureScale).setInteractive().on('pointerdown', () => {
+            console.log('click store');
+        });
 
         [ItemType.wheat, ItemType.rice].forEach(type => {
             this.anims.create({

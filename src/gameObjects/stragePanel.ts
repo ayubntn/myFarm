@@ -74,7 +74,7 @@ class StragePanel {
             icon.setInteractive();
             icon.setScale(config.textureScale);
             icon.setDepth(1001);
-            const numText = this.scene.add.text(icon.x + 20, icon.y, '×' + item.toString(), { fontSize: '15px', color: '#000000' });
+            const numText = new Text(this.scene, icon.x + 30, icon.y, '×' + item.toString(), { fontSize: '15px' });
             numText.setDepth(1001);
             this.itemGroup.add(icon);
             this.itemGroup.add(numText);

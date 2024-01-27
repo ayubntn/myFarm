@@ -4,6 +4,7 @@ import Item from '../objects/item';
 import { CropType, ItemType, cropMap } from '../types/itemType';
 import OperationPanel from './operationPanel';
 import Strage from '../objects/strage';
+import Text from './text';
 
 class PlantingPanel {
     scene: Phaser.Scene;
@@ -14,11 +15,10 @@ class PlantingPanel {
     constructor(scene: Phaser.Scene, operationPanel: OperationPanel) {
         this.scene = scene;
         this.operationPanel = operationPanel;
-        const plantingText = scene.add.text(
-            20,
+        const plantingText = new Text(this.scene,
+            100,
             config.canvasHeight - config.blockHeight / 2,
             'えらんでね',
-            { fontSize: '20px', color: '#000000' }
         );
         plantingText.setY(plantingText.y - plantingText.height / 2);
         this.group = scene.add.group([plantingText]);
@@ -59,7 +59,7 @@ class PlantingPanel {
             icon.setScale(config.textureScale);
             icon.setDepth(1001);
             icon.on('pointerdown', () => this.clickItem(key as ItemType));
-            const numText = this.scene.add.text(icon.x + 20, icon.y, '×' + item.toString(), { fontSize: '15px', color: '#000000' });
+            const numText = new Text(this.scene, icon.x + 30, icon.y, '×' + item.toString(), { fontSize: '15px' });
             numText.setInteractive({ cursor: 'pointer' });
             numText.setDepth(1001);
             numText.on('pointerdown', () => this.clickItem(key as ItemType));
