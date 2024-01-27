@@ -13,10 +13,6 @@ body {
   line-height: 0;
 }
 
-#game.is-development > canvas:first-child {
-  display: none;
-}
-
 .container {
   display: inline-block;
   text-align: left;

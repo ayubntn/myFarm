@@ -20,7 +20,6 @@ import BoxingCropAnim from "../animObjects/BoxingCropAnim";
 let lands: Land[][] = [];
 let landSprites: Phaser.Physics.Arcade.Sprite[][] = [];
 let cropSprites: (Phaser.Physics.Arcade.Sprite | null)[][] = [];
-let isDestroy = false;
 let sceneCount = 0;
 let targetLand: Land | null = null;
 let targetCrop: Crop | null = null;
@@ -32,25 +31,32 @@ let plowPanel: PlowPanel | null = null;
 let plantingPanel: PlantingPanel | null = null;
 let cropDetailPanel: CropDetailPanel | null = null;
 
-class MyScene extends Phaser.Scene {
+class FarmScene extends Phaser.Scene {
 
     constructor() {
-        super({ key: `myscene${sceneCount}` });
+        super({ key: `farm${sceneCount}` });
         sceneCount++;
     }
 
     preload() {
+        lands = [];
+        landSprites = [];
+        cropSprites = [];
+        sceneCount = 0;
+        targetLand = null;
+        targetCrop = null;
+        harvestTargetCrop = null;
+        targetRect = null;
+        strageBar = null;
+        stragePanel = null;
+        plowPanel = null;
+        plantingPanel = null;
+        cropDetailPanel = null;
         loadImages(this);
         Strage.initFromLocalStorage();
     }
 
     create() {
-        // なぜか発生するシーンの重複を削除
-        if (import.meta.env.MODE === 'development' && !isDestroy) {
-            this.scene.remove('myscene0');
-            isDestroy = true;
-            return;
-        }
 
         new Background(this);
 
@@ -64,7 +70,7 @@ class MyScene extends Phaser.Scene {
         plantingPanel = new PlantingPanel(this, operationPanel);
         cropDetailPanel = new CropDetailPanel(this);
         this.add.image(100, 400, 'storeIcon').setScale(config.textureScale).setInteractive().on('pointerdown', () => {
-            console.log('click store');
+            myGlobal.setCurrentScene('store');
         });
 
         [ItemType.wheat, ItemType.rice].forEach(type => {
@@ -264,4 +270,4 @@ class MyScene extends Phaser.Scene {
     }
 }
 
-export default MyScene;
+export default FarmScene;

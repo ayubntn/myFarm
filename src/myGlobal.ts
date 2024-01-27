@@ -7,6 +7,7 @@ export enum OperationType {
 }
 
 type myGlobalType = {
+    setCurrentScene: (currentScene: 'farm' | 'store') => void;
     operation: OperationType | null;
     cropType: CropType | null;
     reset: boolean;
@@ -18,6 +19,7 @@ type myGlobalType = {
 }
 
 const myGlobal = {
+    setCurrentScene: (currentScene) => {console.log(currentScene)},
     operation: null,
     cropType: null,
     reset: false,
