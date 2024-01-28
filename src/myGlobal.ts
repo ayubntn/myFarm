@@ -1,4 +1,4 @@
-import { CropType } from './types/itemType';
+import { CropType, MenuType } from './types/itemType';
 
 export enum OperationType {
     plow = 1,
@@ -16,6 +16,7 @@ type myGlobalType = {
     showStrage: boolean;
     addStrage: boolean;
     subStrage: boolean;
+    cookTarget: MenuType | null;
 }
 
 const myGlobal = {
@@ -34,6 +35,7 @@ const myGlobal = {
     showStrage: false,
     addStrage: false,
     subStrage: false,
+    cookTarget: null,
 } as myGlobalType;
 
 export default myGlobal;

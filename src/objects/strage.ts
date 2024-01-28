@@ -36,6 +36,9 @@ const Strage = {
     count: () => {
         return Object.values(Strage.items).reduce((a, b) => a + b, 0);
     },
+    has: (itemType: ItemType, num = 1) => {
+        return Strage.items[itemType] >= num;
+    },
     reset() {
         localStorage.removeItem('strage');
         Strage.items = {};
