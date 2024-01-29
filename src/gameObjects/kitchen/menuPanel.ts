@@ -22,18 +22,18 @@ class MenuPanel {
             const image = this.scene.add.image(100 * (index + 1), this.panel.y, menu + 'Icon');
             image.setInteractive({ cursor: 'pointer' });
             if (!available && image.preFX) {
+                image.setAlpha(0.5);
                 const fx = image.preFX.addColorMatrix();
                 fx.grayscale(1);
             }
             image.on('pointerdown', () => {
-                myGlobal.cookTarget = menu as MenuType;
+                myGlobal.menuTarget = menu as MenuType;
             });
         });
     }
 
     areIngredientsAvailable(cost: { [key in string]: number }) {
         return Object.keys(cost).every((ingredient) => Strage.has(ingredient as ItemType, cost[ingredient]));
-
     }
 }
 

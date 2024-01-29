@@ -30,6 +30,7 @@ import gohanIcon from "./assets/icon/gohanIcon.png";
 import plowButton from "./assets/plowButton.png";
 import changeButton from "./assets/changeButton.png";
 import goToFarmButton from "./assets/goToFarmButton.png";
+import cookButton from "./assets/cookButton.png";
 
 const loadImages = (scene: Phaser.Scene) => {
     scene.load.image("background", backgroundImage);
@@ -64,6 +65,7 @@ const loadImages = (scene: Phaser.Scene) => {
     scene.load.image("plowButton", plowButton);
     scene.load.image("changeButton", changeButton);
     scene.load.image("goToFarmButton", goToFarmButton);
+    scene.load.image("cookButton", cookButton);
 };
 
 export default loadImages;

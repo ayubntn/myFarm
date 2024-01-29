@@ -10,8 +10,11 @@ import OrderPanel from "../gameObjects/kitchen/orderPanel";
 import MenuPanel from "../gameObjects/kitchen/menuPanel";
 import MenuDetailPanel from "../gameObjects/kitchen/menuDetailPanel";
 import Text from '../gameObjects/text';
+import Kitchen from "../objects/kitchen";
 
+let kitchen: Kitchen | null = null;
 let stragePanel: StragePanel | null = null;
+let menuDetailPanel: MenuDetailPanel | null = null;
 
 class KitchenScene extends Phaser.Scene {
 
@@ -20,7 +23,9 @@ class KitchenScene extends Phaser.Scene {
     }
 
     preload() {
+        kitchen = new Kitchen();
         stragePanel = null;
+        menuDetailPanel = null;
 
         loadImages(this);
         Strage.initFromLocalStorage();
@@ -41,11 +46,11 @@ class KitchenScene extends Phaser.Scene {
         new CookingPanel(this);
         new OrderPanel(this);
         const menuPanel = new MenuPanel(this);
-        new MenuDetailPanel(this);
+        menuDetailPanel = new MenuDetailPanel(this);
     }
 
     update() {
-        this.reset();
+        if (!kitchen) return;
 
         if (stragePanel) {
             if (myGlobal.showStrage) {
@@ -54,11 +59,24 @@ class KitchenScene extends Phaser.Scene {
                 stragePanel.hide();
             }
         }
+
+        if (menuDetailPanel) {
+            if (myGlobal.menuTarget) {
+                menuDetailPanel.show();
+            } else {
+                menuDetailPanel.hide();
+            }
+        }
+
+        if (myGlobal.cookTarget) {
+            kitchen.add(myGlobal.cookTarget);
+            myGlobal.cookTarget = null;
+            myGlobal.menuTarget = null;
+        }
     }
 
     reset() {
-        if (!myGlobal.reset) return;
-        Strage.reset();
+        kitchen?.resetListAndStorage();
     }
 }
 

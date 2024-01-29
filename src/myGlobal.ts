@@ -10,12 +10,12 @@ type myGlobalType = {
     setCurrentScene: (currentScene: 'farm' | 'store' | 'kitchen') => void;
     operation: OperationType | null;
     cropType: CropType | null;
-    reset: boolean;
     clickOutside: boolean;
     doReset: () => void;
     showStrage: boolean;
     addStrage: boolean;
     subStrage: boolean;
+    menuTarget: MenuType | null;
     cookTarget: MenuType | null;
 }
 
@@ -23,18 +23,20 @@ const myGlobal = {
     setCurrentScene: (currentScene) => {console.log(currentScene)},
     operation: null,
     cropType: null,
-    reset: false,
     clickOutside: false,
     doReset: () => {
         myGlobal.operation = null;
         myGlobal.cropType = null;
-        myGlobal.reset = false;
         myGlobal.clickOutside = false;
-
+        myGlobal.addStrage = false;
+        myGlobal.subStrage = false;
+        myGlobal.menuTarget = null;
+        myGlobal.cookTarget = null;
     },
     showStrage: false,
     addStrage: false,
     subStrage: false,
+    menuTarget: null,
     cookTarget: null,
 } as myGlobalType;
 

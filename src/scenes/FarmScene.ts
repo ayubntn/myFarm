@@ -85,8 +85,6 @@ class FarmScene extends Phaser.Scene {
 
     update() {
 
-        this.reset();
-
         // 土地と作物の状態更新
         for (let i = 0; i < lands.length; i++) {
             if (!lands[i]) continue;
@@ -238,8 +236,6 @@ class FarmScene extends Phaser.Scene {
     }
 
     reset() {
-        if (!myGlobal.reset) return;
-        Strage.reset();
         lands = Land.resetListAndStorage();
         landSprites.forEach(row => {
             row.forEach(sprite => {
@@ -254,7 +250,6 @@ class FarmScene extends Phaser.Scene {
         landSprites = [];
         cropSprites = [];
         this.resetState();
-        myGlobal.doReset();
         this.initLands();
     }
 

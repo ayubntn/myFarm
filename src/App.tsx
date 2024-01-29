@@ -6,6 +6,7 @@ import StoreScene from "./scenes/StoreScene";
 import KitchenScene from "./scenes/KitchenScene";
 import GameConfig from "./GameConfig";
 import myGlobal from "./myGlobal";
+import Strage from "./objects/strage";
 
 function App() {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -15,8 +16,16 @@ function App() {
   const [currentScene, setCurrentScene] = useState<string>("");
 
   const reset = () => {
-    myGlobal.reset = true;
-    setCurrentScene('farm');
+    Strage.reset();
+    if (farm) {
+      const farmScene = farm.scene.scenes[0] as FarmScene;
+      farmScene?.reset();
+    }
+    if (kitchen) {
+      const kitchenScene = kitchen.scene.scenes[0] as KitchenScene;
+      kitchenScene?.reset();
+    }
+    myGlobal.doReset();
   }
 
   const initFarm = () => {
