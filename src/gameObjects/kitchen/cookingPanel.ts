@@ -27,7 +27,8 @@ class CookingPanel {
         this.item = null;
         this.group.clear(true, true);
         if (!this.kitchen.cookItems || this.kitchen.cookItems.length <= 0) return;
-        const item = this.kitchen.cookItems[0];
+        const item = this.kitchen.cookingItem();
+        if (!item) return;
         this.item = item;
         const image = this.scene.add.image(
             this.bg.x,
@@ -39,7 +40,6 @@ class CookingPanel {
     }
 
     updateText() {
-        //console.log(this.item)
         this.text?.destroy();
         if (!this.item) return;
         this.text = new Text(

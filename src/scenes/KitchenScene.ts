@@ -15,6 +15,7 @@ import Kitchen from "../objects/kitchen";
 let kitchen: Kitchen;
 let stragePanel: StragePanel | null = null;
 let menuDetailPanel: MenuDetailPanel | null = null;
+let stockPanel: StockPanel | null = null;
 let cookingPanel: CookingPanel | null = null;
 let orderPanel: OrderPanel | null = null;
 
@@ -28,6 +29,7 @@ class KitchenScene extends Phaser.Scene {
         kitchen = new Kitchen();
         stragePanel = null;
         menuDetailPanel = null;
+        stockPanel = null;
         cookingPanel = null;
         orderPanel = null;
 
@@ -46,13 +48,15 @@ class KitchenScene extends Phaser.Scene {
         new Text(this, config.canvasWidth / 2, 25, 'キッチン', { fontSize: '24px' });
         new StrageBar(this);
         stragePanel = new StragePanel(this);
-        new StockPanel(this);
+        stockPanel = new StockPanel(this, kitchen);
         cookingPanel = new CookingPanel(this, kitchen);
         orderPanel = new OrderPanel(this, kitchen);
         new MenuPanel(this);
         menuDetailPanel = new MenuDetailPanel(this);
         
+        stockPanel.update();
         cookingPanel.update();
+        orderPanel.update();
     }
 
     update() {
@@ -74,6 +78,7 @@ class KitchenScene extends Phaser.Scene {
 
         if (myGlobal.cookTarget) {
             kitchen.addCookItem(myGlobal.cookTarget);
+            stockPanel?.update();
             cookingPanel?.update();
             orderPanel?.update();
             myGlobal.cookTarget = null;
@@ -81,6 +86,7 @@ class KitchenScene extends Phaser.Scene {
         }
 
         if (kitchen.update()) {
+            stockPanel?.update();
             cookingPanel?.update();
             orderPanel?.update();
         }

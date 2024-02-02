@@ -19,15 +19,15 @@ class Kitchen {
     }
 
     update() {
-        if (!this.cookItems || this.cookItems.length <= 0) return;
+        if (!this.cookItems || this.cookItems.length <= 0 || !this.cookingItem()) return;
         let shifted = false;
-        if (this.cookItems[0].secondsRemaining() < 0) {
+        if (this.cookingItem().secondsRemaining() < 0) {
             this.stockItems.push(this.cookItems[0]);
             this.cookItems.shift();
             shifted = true;
-        }
-        if (this.cookItems.length > 0) {
-            this.cookItems[0].setCooking();
+            if (this.cookItems.length > 0) {
+                this.cookItems[0].setCooking();
+            }
         }
         localStorage.setItem("kitchen", JSON.stringify(this));
         return shifted;
@@ -45,7 +45,11 @@ class Kitchen {
             Object.keys(kitchenObj).forEach(key => {
                 if (key === 'cookItems') {
                     kitchenObj[key].forEach((item: CookItem) => {
-                        this.cookItems.push(new CookItem(item.type as MenuType, new Date(item.createdAt)));
+                        let startAt = null;
+                        if (typeof item.startAt === 'string') {
+                            startAt = new Date(item.startAt);
+                        }
+                        this.cookItems.push(new CookItem(item.type as MenuType, item.status, startAt));
                     });
                 } else if (key === 'stockItems') {
                     kitchenObj[key].forEach((item: Item) => {
@@ -58,6 +62,10 @@ class Kitchen {
 
     orderItems() {
         return this.cookItems.filter(item => item.status === 'order');
+    }
+
+    cookingItem() {
+        return this.cookItems.filter(item => item.status === 'cooking')[0];
     }
 }
 

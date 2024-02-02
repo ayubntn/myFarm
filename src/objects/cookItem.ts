@@ -7,21 +7,23 @@ export const CookingTime = {
 }
 
 export enum CookingStatus {
-    cooking =  'cooking',
-    order =  'order',
+    cooking = 'cooking',
+    order = 'order',
 }
 
 class CookItem extends Item {
-    createdAt: Date;
+    startAt: Date | null = null;
     status: CookingStatus = CookingStatus.order;
 
-    constructor(type: MenuType, createdAt: Date = new Date()) {
+    constructor(type: MenuType, status: CookingStatus = CookingStatus.order, startAt: Date | null = null) {
         super(type);
-        this.createdAt = createdAt;
+        this.status = status;
+        this.startAt = startAt;
     }
 
     elapsedSeconds() {
-        return (Date.now() - this.createdAt.getTime()) / 1000;
+        if (this.startAt === null) return 0;
+        return (Date.now() - this.startAt.getTime()) / 1000;
     }
 
     secondsRemaining() {
@@ -29,13 +31,14 @@ class CookItem extends Item {
         const elapsedSeconds = this.elapsedSeconds();
         return time - elapsedSeconds;
     }
-    
+
     secondsRemainingRound() {
         return Math.floor(this.secondsRemaining());
     }
 
     setCooking() {
         this.status = CookingStatus.cooking;
+        this.startAt = new Date();
     }
 }
 
