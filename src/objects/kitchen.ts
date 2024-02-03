@@ -1,6 +1,7 @@
 import Item from './item';
 import CookItem from './cookItem';
 import { MenuType } from '../types/itemType';
+import Strage from './strage';
 
 class Kitchen {
     cookItems: CookItem[] = [];
@@ -66,6 +67,13 @@ class Kitchen {
 
     cookingItem() {
         return this.cookItems.filter(item => item.status === 'cooking')[0];
+    }
+
+    shiftStockItemToStrage(id: number) {
+        const item = this.stockItems.find(item =>  item.id === id);
+        if (!item) return;
+        Strage.add(item);
+        this.stockItems = this.stockItems.filter(item => item.id !== id);
     }
 }
 

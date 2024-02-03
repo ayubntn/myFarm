@@ -24,6 +24,11 @@ class StockPanel {
             const x = (this.bg.getTopLeft().x || 0) + 60 + 80 * index;
             const y = 160;
             const image = this.scene.add.image(x, y, item.type + 'Icon');
+            image.setInteractive({ cursor: 'pointer' });
+            image.on('pointerdown', () => {
+                this.kitchen.shiftStockItemToStrage(item.id);
+                this.update();
+            });
             this.group.add(image);
         });
     }

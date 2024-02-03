@@ -1,6 +1,7 @@
 import {ItemType, ItemName, ItemGroup} from "../types/itemType";
 
 class Item {
+    id: number = new Date().getTime();
     type: ItemType;
     name: string;
 
