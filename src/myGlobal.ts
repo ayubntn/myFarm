@@ -17,6 +17,7 @@ type myGlobalType = {
     subStrage: boolean;
     menuTarget: MenuType | null;
     cookTarget: MenuType | null;
+    stored: boolean;
 }
 
 const myGlobal = {
@@ -32,12 +33,14 @@ const myGlobal = {
         myGlobal.subStrage = false;
         myGlobal.menuTarget = null;
         myGlobal.cookTarget = null;
+        myGlobal.stored = false;
     },
     showStrage: false,
     addStrage: false,
     subStrage: false,
     menuTarget: null,
     cookTarget: null,
+    stored: false,
 } as myGlobalType;
 
 export default myGlobal;

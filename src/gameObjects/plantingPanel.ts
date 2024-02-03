@@ -77,7 +77,7 @@ class PlantingPanel {
     clickItem(key: ItemType) {
         myGlobal.operation = OperationType.planting;
         myGlobal.cropType = cropMap[key] as CropType;
-        Strage.remove(new Item(key));
+        Strage.remove(key);
     }
 }
 

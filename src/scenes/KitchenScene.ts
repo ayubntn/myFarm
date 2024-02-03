@@ -18,6 +18,7 @@ let menuDetailPanel: MenuDetailPanel | null = null;
 let stockPanel: StockPanel | null = null;
 let cookingPanel: CookingPanel | null = null;
 let orderPanel: OrderPanel | null = null;
+let menuPanel: MenuPanel | null = null;
 
 class KitchenScene extends Phaser.Scene {
 
@@ -32,6 +33,7 @@ class KitchenScene extends Phaser.Scene {
         stockPanel = null;
         cookingPanel = null;
         orderPanel = null;
+        menuPanel = null;
 
         loadImages(this);
         Strage.initFromLocalStorage();
@@ -51,7 +53,7 @@ class KitchenScene extends Phaser.Scene {
         stockPanel = new StockPanel(this, kitchen);
         cookingPanel = new CookingPanel(this, kitchen);
         orderPanel = new OrderPanel(this, kitchen);
-        new MenuPanel(this);
+        menuPanel = new MenuPanel(this);
         menuDetailPanel = new MenuDetailPanel(this);
         
         stockPanel.update();
@@ -83,6 +85,11 @@ class KitchenScene extends Phaser.Scene {
             orderPanel?.update();
             myGlobal.cookTarget = null;
             myGlobal.menuTarget = null;
+        }
+
+        if (myGlobal.stored) {
+            menuPanel?.update();
+            myGlobal.stored = false;
         }
 
         if (kitchen.update()) {

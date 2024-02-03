@@ -21,14 +21,14 @@ const Strage = {
         localStorage.setItem('strage', JSON.stringify(Strage.items));
         myGlobal.addStrage = true;
     },
-    remove: (item: Item, num = 1) => {
-        if (!Strage.items[item.type]) {
+    remove: (itemType: ItemType, num = 1) => {
+        if (!Strage.items[itemType]) {
             return;
         }
-        if (Strage.items[item.type] <= num) {
-            delete Strage.items[item.type];
+        if (Strage.items[itemType] <= num) {
+            delete Strage.items[itemType];
         } else {
-            Strage.items[item.type] -= num;
+            Strage.items[itemType] -= num;
         }
         localStorage.setItem('strage', JSON.stringify(Strage.items));
         myGlobal.subStrage = true;

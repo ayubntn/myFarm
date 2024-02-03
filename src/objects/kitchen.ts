@@ -74,6 +74,7 @@ class Kitchen {
         if (!item) return;
         Strage.add(item);
         this.stockItems = this.stockItems.filter(item => item.id !== id);
+        localStorage.setItem("kitchen", JSON.stringify(this));
     }
 }
 

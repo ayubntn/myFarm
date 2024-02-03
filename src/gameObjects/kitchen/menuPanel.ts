@@ -6,6 +6,7 @@ import Strage from '../../objects/strage';
 class MenuPanel {
     scene: Phaser.Scene;
     panel: Phaser.GameObjects.Rectangle;
+    group: Phaser.GameObjects.Group;
 
     constructor(scene: Phaser.Scene) {
         this.scene = scene;
@@ -16,7 +17,16 @@ class MenuPanel {
             120,
             0xffffff
         );
+        this.group = scene.add.group();
+        this.update();
+    }
 
+    areIngredientsAvailable(cost: { [key in string]: number }) {
+        return Object.keys(cost).every((ingredient) => Strage.has(ingredient as ItemType, cost[ingredient]));
+    }
+
+    update() {
+        this.group.clear(true, true);
         Object.keys(MenuCost).forEach((menu, index) => {
             const available = this.areIngredientsAvailable(MenuCost[menu]);
             const image = this.scene.add.image(100 * (index + 1), this.panel.y, menu + 'Icon');
@@ -29,11 +39,8 @@ class MenuPanel {
             image.on('pointerdown', () => {
                 myGlobal.menuTarget = menu as MenuType;
             });
+            this.group.add(image);
         });
-    }
-
-    areIngredientsAvailable(cost: { [key in string]: number }) {
-        return Object.keys(cost).every((ingredient) => Strage.has(ingredient as ItemType, cost[ingredient]));
     }
 }
 

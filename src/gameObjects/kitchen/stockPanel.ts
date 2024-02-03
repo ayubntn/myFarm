@@ -1,6 +1,7 @@
 import config from '../../GameConfig';
 import Text from '../text';
 import Kitchen from '../../objects/kitchen';
+import myGlobal from '../../myGlobal';
 
 class StockPanel {
     scene: Phaser.Scene;
