@@ -26,6 +26,8 @@ import wheatIcon from "./assets/icon/wheat.png";
 import wheatSeedIcon from "./assets/icon/wheatSeed.png";
 import breadIcon from "./assets/icon/breadIcon.png";
 import gohanIcon from "./assets/icon/gohanIcon.png";
+import cowIcon from "./assets/icon/cowIcon.png";
+import chickenIcon from "./assets/icon/chickenIcon.png";
 
 import plowButton from "./assets/plowButton.png";
 import changeButton from "./assets/changeButton.png";
@@ -61,6 +63,8 @@ const loadImages = (scene: Phaser.Scene) => {
     scene.load.image("wheatSeedIcon", wheatSeedIcon);
     scene.load.image("breadIcon", breadIcon);
     scene.load.image("gohanIcon", gohanIcon);
+    scene.load.image("cowIcon", cowIcon);
+    scene.load.image("chickenIcon", chickenIcon);
 
     scene.load.image("plowButton", plowButton);
     scene.load.image("changeButton", changeButton);

@@ -5,6 +5,8 @@ export enum ItemType {
     riceSeed = 'riceSeed',
     bread = 'bread',
     gohan = 'gohan',
+    cow = 'cow',
+    chicken = 'chicken',
 }
 
 export const ItemName = {
@@ -14,15 +16,19 @@ export const ItemName = {
     [ItemType.riceSeed]: 'おこめのたね',
     [ItemType.bread]: 'パン',
     [ItemType.gohan]: 'ごはん',
+    [ItemType.cow]: 'うし',
+    [ItemType.chicken]: 'にわとり',
 }
 
 export type CropType = ItemType.wheat | ItemType.rice;
 export type SeedType = ItemType.wheatSeed | ItemType.riceSeed;
 export type MenuType = ItemType.bread | ItemType.gohan;
+export type GoodsType = ItemType.cow | ItemType.chicken;
 
 export const ItemGroup = {
     seed: [ItemType.wheatSeed, ItemType.riceSeed],
     crop: [ItemType.wheat, ItemType.rice],
+    goods: [ItemType.cow, ItemType.chicken],
 }
 
 export const seedMap = {

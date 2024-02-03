@@ -37,6 +37,7 @@ class Kitchen {
     resetListAndStorage() {
         localStorage.removeItem("kitchen");
         this.cookItems = [];
+        this.stockItems = [];
     }
 
     createListFromStrage() {
