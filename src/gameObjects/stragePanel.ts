@@ -21,6 +21,7 @@ class StragePanel {
             0xffffff
         );
         rect.setInteractive();
+        rect.setStrokeStyle(4, 0xFF7272);
 
         const title = new Text(this.scene,
             rect.x,

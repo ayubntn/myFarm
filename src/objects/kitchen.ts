@@ -54,7 +54,7 @@ class Kitchen {
                     });
                 } else if (key === 'stockItems') {
                     kitchenObj[key].forEach((item: Item) => {
-                        this.stockItems.push(new Item(item.type as MenuType));
+                        this.stockItems.push(new Item(item.type as MenuType, item.id));
                     });
                 }
             });

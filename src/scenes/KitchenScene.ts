@@ -13,6 +13,7 @@ import Text from '../gameObjects/text';
 import Kitchen from "../objects/kitchen";
 
 let kitchen: Kitchen;
+let strageBar: StrageBar | null = null;
 let stragePanel: StragePanel | null = null;
 let menuDetailPanel: MenuDetailPanel | null = null;
 let stockPanel: StockPanel | null = null;
@@ -28,6 +29,7 @@ class KitchenScene extends Phaser.Scene {
 
     preload() {
         kitchen = new Kitchen();
+        strageBar = null;
         stragePanel = null;
         menuDetailPanel = null;
         stockPanel = null;
@@ -48,7 +50,7 @@ class KitchenScene extends Phaser.Scene {
             myGlobal.setCurrentScene('farm');
         });
         new Text(this, config.canvasWidth / 2, 25, 'キッチン', { fontSize: '24px' });
-        new StrageBar(this);
+        strageBar = new StrageBar(this);
         stragePanel = new StragePanel(this);
         stockPanel = new StockPanel(this, kitchen);
         cookingPanel = new CookingPanel(this, kitchen);
@@ -80,6 +82,7 @@ class KitchenScene extends Phaser.Scene {
 
         if (myGlobal.cookTarget) {
             kitchen.addCookItem(myGlobal.cookTarget);
+            strageBar?.update();
             stockPanel?.update();
             cookingPanel?.update();
             orderPanel?.update();
@@ -87,9 +90,11 @@ class KitchenScene extends Phaser.Scene {
             myGlobal.menuTarget = null;
         }
 
-        if (myGlobal.stored) {
+        if (myGlobal.stored || myGlobal.taked) {
             menuPanel?.update();
             myGlobal.stored = false;
+            myGlobal.taked = false;
+            strageBar?.update();
         }
 
         if (kitchen.update()) {

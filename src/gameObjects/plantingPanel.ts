@@ -54,10 +54,14 @@ class PlantingPanel {
         for (const key in Strage.items) {
             const item = Strage.items[key];
             if (!Item.isSeed(key as ItemType)) continue;
+            const rect = this.scene.add.rectangle(basePoint.x + num * 105, basePoint.y + 50, 80, 50, 0xffffff);
+            rect.setInteractive({ cursor: 'pointer' });
+            rect.setDepth(1001);
+            rect.on('pointerdown', () => this.clickItem(key as ItemType));
             const icon = this.scene.add.image(basePoint.x + num * 100, basePoint.y + 40, key + 'Icon');
             icon.setInteractive({ cursor: 'pointer' });
-            icon.setScale(config.textureScale);
             icon.setDepth(1001);
+            icon.setScale(config.textureScale);
             icon.on('pointerdown', () => this.clickItem(key as ItemType));
             const numText = new Text(this.scene, icon.x + 30, icon.y, '×' + item.toString(), { fontSize: '12px' });
             numText.setInteractive({ cursor: 'pointer' });
@@ -70,6 +74,7 @@ class PlantingPanel {
             this.itemGroup.add(icon);
             this.itemGroup.add(numText);
             this.itemGroup.add(name);
+            this.itemGroup.add(rect);
             num++;
         }
     }

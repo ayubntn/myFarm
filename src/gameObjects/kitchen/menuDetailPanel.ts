@@ -55,7 +55,7 @@ class MenuDetailPanel {
                 Object.keys(cost).forEach((ingredient) => {
                     Strage.remove(ingredient as ItemType, cost[ingredient]);
                 });
-                myGlobal.stored = true;
+                myGlobal.taked = true;
             });
             this.contents?.add(cookButton);
         } else {

@@ -5,8 +5,9 @@ class Item {
     type: ItemType;
     name: string;
 
-    constructor(type: ItemType) {
+    constructor(type: ItemType, id: number = new Date().getTime()) {
         this.type = type;
+        this.id = id;
         this.name = ItemName[type];
     }
 

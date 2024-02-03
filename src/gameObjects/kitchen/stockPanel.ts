@@ -28,6 +28,7 @@ class StockPanel {
             image.setInteractive({ cursor: 'pointer' });
             image.on('pointerdown', () => {
                 this.kitchen.shiftStockItemToStrage(item.id);
+                myGlobal.stored = true;
                 this.update();
             });
             this.group.add(image);
