@@ -1,13 +1,17 @@
 import config from '../GameConfig';
 import myGlobal from '../myGlobal';
 import loadImages from "../ImageLoader";
+import Strage from '../objects/strage';
 import Text from '../gameObjects/text';
 import StrageBar from '../gameObjects/strageBar';
 import StragePanel from '../gameObjects/stragePanel';
 import GoodsPanel from '../gameObjects/store/goodsPanel';
+import MenuDetailPanel from '../gameObjects/menuDetailPanel';
+import Item from '../objects/item';
 
 let strageBar: StrageBar | null = null;
 let stragePanel: StragePanel | null = null;
+let menuDetailPanel: MenuDetailPanel | null = null;
 
 class StoreScene extends Phaser.Scene {
 
@@ -18,9 +22,10 @@ class StoreScene extends Phaser.Scene {
     preload() {
         strageBar = null;
         stragePanel = null;
+        menuDetailPanel = null;
 
         loadImages(this);
-
+        Strage.initFromLocalStorage();
     }
 
     create() {
@@ -37,6 +42,7 @@ class StoreScene extends Phaser.Scene {
         strageBar = new StrageBar(this);
         stragePanel = new StragePanel(this);
         new GoodsPanel(this);
+        menuDetailPanel = new MenuDetailPanel(this, 'trade');
     }
 
     update() {
@@ -47,10 +53,24 @@ class StoreScene extends Phaser.Scene {
                 stragePanel.hide();
             }
         }
+
+        if (menuDetailPanel) {
+            if (myGlobal.menuTarget) {
+                menuDetailPanel.show();
+            } else {
+                menuDetailPanel.hide();
+            }
+        }
+
+        if (myGlobal.tradeTarget) {
+            Strage.add(new Item(myGlobal.tradeTarget));
+            myGlobal.tradeTarget = null;
+            strageBar?.update();
+        } 
     }
 
     reset() {
-        
+
     }
 }
 

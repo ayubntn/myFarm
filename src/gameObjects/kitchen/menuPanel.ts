@@ -1,6 +1,6 @@
 import config from '../../GameConfig';
 import myGlobal from '../../myGlobal';
-import { MenuCost, ItemType, MenuType } from '../../types/itemType';
+import { ItemGroup, MenuCost, ItemType, MenuType } from '../../types/itemType';
 import Strage from '../../objects/strage';
 
 class MenuPanel {
@@ -27,7 +27,7 @@ class MenuPanel {
 
     update() {
         this.group.clear(true, true);
-        Object.keys(MenuCost).forEach((menu, index) => {
+        ItemGroup.menu.forEach((menu, index) => {
             const available = this.areIngredientsAvailable(MenuCost[menu]);
             const image = this.scene.add.image(100 * (index + 1), this.panel.y, menu + 'Icon');
             image.setInteractive({ cursor: 'pointer' });

@@ -8,9 +8,10 @@ import StockPanel from "../gameObjects/kitchen/stockPanel";
 import CookingPanel from "../gameObjects/kitchen/cookingPanel";
 import OrderPanel from "../gameObjects/kitchen/orderPanel";
 import MenuPanel from "../gameObjects/kitchen/menuPanel";
-import MenuDetailPanel from "../gameObjects/kitchen/menuDetailPanel";
+import MenuDetailPanel from "../gameObjects/menuDetailPanel";
 import Text from '../gameObjects/text';
 import Kitchen from "../objects/kitchen";
+import { MenuType } from "../types/itemType";
 
 let kitchen: Kitchen;
 let strageBar: StrageBar | null = null;
@@ -57,7 +58,7 @@ class KitchenScene extends Phaser.Scene {
         orderPanel = new OrderPanel(this, kitchen);
         menuPanel = new MenuPanel(this);
         menuDetailPanel = new MenuDetailPanel(this);
-        
+
         stockPanel.update();
         cookingPanel.update();
         orderPanel.update();
@@ -80,13 +81,13 @@ class KitchenScene extends Phaser.Scene {
             }
         }
 
-        if (myGlobal.cookTarget) {
-            kitchen.addCookItem(myGlobal.cookTarget);
+        if (myGlobal.tradeTarget) {
+            kitchen.addCookItem(myGlobal.tradeTarget as MenuType);
             strageBar?.update();
             stockPanel?.update();
             cookingPanel?.update();
             orderPanel?.update();
-            myGlobal.cookTarget = null;
+            myGlobal.tradeTarget = null;
             myGlobal.menuTarget = null;
         }
 
@@ -108,6 +109,10 @@ class KitchenScene extends Phaser.Scene {
 
     reset() {
         kitchen?.resetListAndStorage();
+        stockPanel?.update();
+        cookingPanel?.update();
+        orderPanel?.update();
+        menuPanel?.update();
     }
 }
 

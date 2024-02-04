@@ -33,6 +33,7 @@ import plowButton from "./assets/plowButton.png";
 import changeButton from "./assets/changeButton.png";
 import goToFarmButton from "./assets/goToFarmButton.png";
 import cookButton from "./assets/cookButton.png";
+import tradeButton from "./assets/tradeButton.png";
 
 const loadImages = (scene: Phaser.Scene) => {
     scene.load.image("background", backgroundImage);
@@ -70,6 +71,7 @@ const loadImages = (scene: Phaser.Scene) => {
     scene.load.image("changeButton", changeButton);
     scene.load.image("goToFarmButton", goToFarmButton);
     scene.load.image("cookButton", cookButton);
+    scene.load.image("tradeButton", tradeButton);
 };
 
 export default loadImages;

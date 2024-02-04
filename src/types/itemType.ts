@@ -28,6 +28,7 @@ export type GoodsType = ItemType.cow | ItemType.chicken;
 export const ItemGroup = {
     seed: [ItemType.wheatSeed, ItemType.riceSeed],
     crop: [ItemType.wheat, ItemType.rice],
+    menu: [ItemType.bread, ItemType.gohan],
     goods: [ItemType.cow, ItemType.chicken],
 }
 
@@ -41,4 +42,6 @@ export const cropMap = Object.fromEntries(Object.entries(seedMap).map(([key, val
 export const MenuCost: {[key in string]: {[key2 in string]: number}} = {
     [ItemType.bread as MenuType]: {[ItemType.wheat as string]: 3},
     [ItemType.gohan as MenuType]: {[ItemType.rice as string]: 3},
+    [ItemType.cow as GoodsType]: {[ItemType.gohan as string]: 10},
+    [ItemType.chicken as GoodsType]: {[ItemType.bread as string]: 10},
 };

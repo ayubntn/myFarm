@@ -1,16 +1,18 @@
-import config from '../../GameConfig';
-import myGlobal from '../../myGlobal';
-import { ItemName, MenuCost, MenuType, ItemType } from '../../types/itemType';
-import Text from '../text';
-import Strage from '../../objects/strage';
+import config from '../GameConfig';
+import myGlobal from '../myGlobal';
+import { ItemName, MenuCost, MenuType, ItemType } from '../types/itemType';
+import Text from './text';
+import Strage from '../objects/strage';
 
 class MenuDetailPanel {
     scene: Phaser.Scene;
     modalGroup: Phaser.GameObjects.Group;
     contents: Phaser.GameObjects.Group | null = null;
+    mode: 'cooking' | 'trade';
 
-    constructor(scene: Phaser.Scene) {
+    constructor(scene: Phaser.Scene, mode: 'cooking' | 'trade' = 'cooking') {
         this.scene = scene;
+        this.mode = mode;
         const bg = this.scene.add.rectangle(config.canvasWidth / 2, config.canvasHeight / 2, config.canvasWidth / 2, 300, 0xffffff);
         bg.isStroked = true;
         bg.setStrokeStyle(4, 0xFF7272);
@@ -25,6 +27,8 @@ class MenuDetailPanel {
         this.modalGroup = this.scene.add.group([bg, close]);
         this.modalGroup.setVisible(false);
         this.modalGroup.setActive(false);
+        myGlobal.tradeTarget = null;
+        myGlobal.menuTarget = null;
     }
 
     show() {
@@ -46,18 +50,23 @@ class MenuDetailPanel {
         });
 
         if (available) {
-            const cookButton = this.scene.add.image(config.canvasWidth / 2, config.canvasHeight / 2 + 100, 'cookButton');
-            cookButton.setScale(config.textureScale);
-            cookButton.setInteractive({ cursor: 'pointer' });
-            cookButton.on('pointerdown', () => {
-                myGlobal.cookTarget = myGlobal.menuTarget;
+            let button = null;
+            if (this.mode === 'trade') {
+                button = this.scene.add.image(config.canvasWidth / 2, config.canvasHeight / 2 + 100, 'tradeButton');
+            } else {
+                button = this.scene.add.image(config.canvasWidth / 2, config.canvasHeight / 2 + 100, 'cookButton');
+            }
+            button.setScale(config.textureScale);
+            button.setInteractive({ cursor: 'pointer' });
+            button.on('pointerdown', () => {
+                myGlobal.tradeTarget = myGlobal.menuTarget;
                 myGlobal.menuTarget = null;
                 Object.keys(cost).forEach((ingredient) => {
                     Strage.remove(ingredient as ItemType, cost[ingredient]);
                 });
                 myGlobal.taked = true;
             });
-            this.contents?.add(cookButton);
+            this.contents?.add(button);
         } else {
             const notEnoughMessage = new Text(this.scene, config.canvasWidth / 2, config.canvasHeight / 2 + 100, 'ざいりょうが たりないよ！');
             this.contents?.add(notEnoughMessage);
