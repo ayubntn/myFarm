@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import config from "../GameConfig";
 import Land, { LandType } from "../objects/land";
 import Crop from "../objects/crop";
+import Livestock from "../objects/livestock";
 import myGlobal, { OperationType } from "../myGlobal";
 import { CropStatus } from "../objects/crop";
 import { ItemType } from "../types/itemType";
@@ -10,6 +11,7 @@ import PlowPanel from "../gameObjects/plowPanel";
 import Background from "../gameObjects/background";
 import OperationPanel from "../gameObjects/operationPanel";
 import PlantingPanel from "../gameObjects/plantingPanel";
+import LivestockPanel from "../gameObjects/livestockPanel";
 import CropDetailPanel from "../gameObjects/cropDetailPanel";
 import StragePanel from "../gameObjects/stragePanel";
 import TargetRect from "../gameObjects/targetRect";
@@ -30,6 +32,7 @@ let strageBar: StrageBar | null = null;
 let stragePanel: StragePanel | null = null;
 let plowPanel: PlowPanel | null = null;
 let plantingPanel: PlantingPanel | null = null;
+let livestockPanel: LivestockPanel | null = null;
 let cropDetailPanel: CropDetailPanel | null = null;
 
 class FarmScene extends Phaser.Scene {
@@ -52,6 +55,7 @@ class FarmScene extends Phaser.Scene {
         stragePanel = null;
         plowPanel = null;
         plantingPanel = null;
+        livestockPanel = null;
         cropDetailPanel = null;
         loadImages(this);
         Strage.initFromLocalStorage();
@@ -69,6 +73,7 @@ class FarmScene extends Phaser.Scene {
         const operationPanel = new OperationPanel(this);
         plowPanel = new PlowPanel(this, operationPanel);
         plantingPanel = new PlantingPanel(this, operationPanel);
+        livestockPanel = new LivestockPanel(this, operationPanel);
         cropDetailPanel = new CropDetailPanel(this);
         new SceneNav(this);
 
@@ -174,6 +179,12 @@ class FarmScene extends Phaser.Scene {
         } else {
             cropDetailPanel?.setVisible(false);
         }
+        if (myGlobal.operation === OperationType.livestock) {
+            livestockPanel?.show();
+            plowPanel?.setVisible(false);
+        } else {
+            livestockPanel?.hide();
+        }
 
         // 操作
         if (myGlobal.operation === OperationType.plow) {
@@ -193,6 +204,9 @@ class FarmScene extends Phaser.Scene {
             harvestTargetCrop.harvest();
             targetLand?.changeTypeToWaste();
             this.resetState();
+        }
+        if (myGlobal.livestockType) {
+            targetLand?.setLivestock(new Livestock(myGlobal.livestockType));
         }
         if (myGlobal.clickOutside) {
             this.resetState();

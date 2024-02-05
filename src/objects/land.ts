@@ -1,4 +1,5 @@
 import Crop from "./crop";
+import Livestock from "./livestock";
 import config from "../GameConfig";
 import myGlobal, { OperationType } from "../myGlobal";
 
@@ -11,6 +12,7 @@ export enum LandType {
 class Land {
     type: LandType;
     crop?: Crop;
+    livestock?: Livestock;
 
     constructor(type: LandType) {
         this.type = type;
@@ -18,6 +20,10 @@ class Land {
 
     setCrop(crop: Crop) {
         this.crop = crop;
+    }
+
+    setLivestock(livestock: Livestock) {
+        this.livestock = livestock;
     }
 
     onClick() {

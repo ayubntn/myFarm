@@ -17,13 +17,20 @@ class PlowPanel {
             myGlobal.operation = OperationType.plow;
         });
 
-        const changeButton = scene.add.image(470, operationPanel.getCenter().y || 0, 'changeButton');
+        const livestockButton = scene.add.image(430, operationPanel.getCenter().y || 0, 'livestockButton');
+        livestockButton.setScale(config.textureScale);
+        livestockButton.setInteractive({ cursor: 'pointer' });
+        livestockButton.on('pointerdown', () => {
+            myGlobal.operation = OperationType.livestock;
+        });
+
+        const changeButton = scene.add.image(670, operationPanel.getCenter().y || 0, 'changeButton');
         changeButton.setScale(config.textureScale);
         changeButton.setInteractive({ cursor: 'pointer' });
         changeButton.on('pointerdown', () => {
             myGlobal.operation = OperationType.changeLandType;
         });
-        this.group = scene.add.group([plowButton, changeButton]);
+        this.group = scene.add.group([plowButton, livestockButton, changeButton]);
     }
 
     setVisible(visible: boolean) {

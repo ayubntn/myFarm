@@ -86,7 +86,7 @@ function App() {
     if (!canvas || farm) return;
 
     myGlobal.setCurrentScene = setCurrentScene;
-    myGlobal.setCurrentScene('store');
+    myGlobal.setCurrentScene('farm');
   }, [canvas, farm]);
 
   useEffect(() => {

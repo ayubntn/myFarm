@@ -7,6 +7,8 @@ export enum ItemType {
     gohan = 'gohan',
     cow = 'cow',
     chicken = 'chicken',
+    milk = 'milk',
+    egg = 'egg',
 }
 
 export const ItemName = {
@@ -18,11 +20,14 @@ export const ItemName = {
     [ItemType.gohan]: 'ごはん',
     [ItemType.cow]: 'うし',
     [ItemType.chicken]: 'にわとり',
+    [ItemType.milk]: 'ぎゅうにゅう',
+    [ItemType.egg]: 'たまご',
 }
 
 export type CropType = ItemType.wheat | ItemType.rice;
 export type SeedType = ItemType.wheatSeed | ItemType.riceSeed;
 export type MenuType = ItemType.bread | ItemType.gohan;
+export type LivestockType = ItemType.cow | ItemType.chicken;
 export type GoodsType = ItemType.cow | ItemType.chicken;
 
 export const ItemGroup = {
@@ -30,6 +35,7 @@ export const ItemGroup = {
     crop: [ItemType.wheat, ItemType.rice],
     menu: [ItemType.bread, ItemType.gohan],
     goods: [ItemType.cow, ItemType.chicken],
+    livestocks: [ItemType.cow, ItemType.chicken],
 }
 
 export const seedMap = {
@@ -39,6 +45,11 @@ export const seedMap = {
 
 export const cropMap = Object.fromEntries(Object.entries(seedMap).map(([key, value]) => [value, key]));
 
+export const livestockMap = {
+    [ItemType.cow]: ItemType.milk,
+    [ItemType.chicken]: ItemType.egg,
+
+}
 export const MenuCost: {[key in string]: {[key2 in string]: number}} = {
     [ItemType.bread as MenuType]: {[ItemType.wheat as string]: 3},
     [ItemType.gohan as MenuType]: {[ItemType.rice as string]: 3},

@@ -1,15 +1,17 @@
-import { CropType, ItemType } from './types/itemType';
+import { CropType, ItemType, LivestockType } from './types/itemType';
 
 export enum OperationType {
     plow = 1,
     planting = 2,
     changeLandType = 3,
+    livestock = 4,
 }
 
 type myGlobalType = {
     setCurrentScene: (currentScene: 'farm' | 'store' | 'kitchen') => void;
     operation: OperationType | null;
     cropType: CropType | null;
+    livestockType: LivestockType | null;
     clickOutside: boolean;
     doReset: () => void;
     showStrage: boolean;
@@ -25,6 +27,7 @@ const myGlobal = {
     setCurrentScene: (currentScene) => {console.log(currentScene)},
     operation: null,
     cropType: null,
+    livestockType: null,
     clickOutside: false,
     doReset: () => {
         myGlobal.operation = null;

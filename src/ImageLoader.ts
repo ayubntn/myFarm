@@ -28,12 +28,15 @@ import breadIcon from "./assets/icon/breadIcon.png";
 import gohanIcon from "./assets/icon/gohanIcon.png";
 import cowIcon from "./assets/icon/cowIcon.png";
 import chickenIcon from "./assets/icon/chickenIcon.png";
+import milkIcon from "./assets/icon/milkIcon.png";
+import eggIcon from "./assets/icon/eggIcon.png";
 
 import plowButton from "./assets/plowButton.png";
 import changeButton from "./assets/changeButton.png";
 import goToFarmButton from "./assets/goToFarmButton.png";
 import cookButton from "./assets/cookButton.png";
 import tradeButton from "./assets/tradeButton.png";
+import livestockButton from "./assets/livestockButton.png";
 
 const loadImages = (scene: Phaser.Scene) => {
     scene.load.image("background", backgroundImage);
@@ -66,12 +69,15 @@ const loadImages = (scene: Phaser.Scene) => {
     scene.load.image("gohanIcon", gohanIcon);
     scene.load.image("cowIcon", cowIcon);
     scene.load.image("chickenIcon", chickenIcon);
+    scene.load.image("milkIcon", milkIcon);
+    scene.load.image("eggIcon", eggIcon);
 
     scene.load.image("plowButton", plowButton);
     scene.load.image("changeButton", changeButton);
     scene.load.image("goToFarmButton", goToFarmButton);
     scene.load.image("cookButton", cookButton);
     scene.load.image("tradeButton", tradeButton);
+    scene.load.image("livestockButton", livestockButton);
 };
 
 export default loadImages;

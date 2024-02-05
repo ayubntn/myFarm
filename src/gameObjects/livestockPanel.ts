@@ -1,16 +1,15 @@
 import myGlobal, { OperationType } from '../myGlobal';
-import Item from '../objects/item';
-import { CropType, ItemType, cropMap } from '../types/itemType';
+import { ItemType, ItemGroup, LivestockType } from '../types/itemType';
 import ChoosePanel from './choosePanel';
 import Strage from '../objects/strage';
 
-class PlantingPanel extends ChoosePanel {
+class LivestockPanel extends ChoosePanel {
 
     getItems() {
         const items: { [key: string]: number } = {};
         for (const key in Strage.items) {
             const item = Strage.items[key];
-            if (Item.isSeed(key as ItemType)) {
+            if (ItemGroup.livestocks.includes(key as ItemType)) {
                 items[key] = item;
             }
         }
@@ -19,9 +18,9 @@ class PlantingPanel extends ChoosePanel {
 
     clickItem(key: ItemType) {
         myGlobal.operation = OperationType.planting;
-        myGlobal.cropType = cropMap[key] as CropType;
+        myGlobal.livestockType = key as LivestockType;
         Strage.remove(key);
     }
 }
 
-export default PlantingPanel;
+export default LivestockPanel;
